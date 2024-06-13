@@ -58,7 +58,8 @@
                         <el-table-column prop="uploadUser" label="上传人" />
                         <el-table-column prop="reason" label="操作">
                             <template slot-scope="scope">
-                                <el-link v-if="isShowFile(scope.row.originalFilename)" type="success" @click="downloadInform(scope.row)">查看</el-link>
+                                <el-link v-if="isShowFile(scope.row.originalFilename)" type="success"
+                                    @click="downloadInform(scope.row)">查看</el-link>
                                 <el-link v-else type="success" @click="downloadInform(scope.row)">下载</el-link>
                             </template>
                         </el-table-column>
@@ -224,12 +225,14 @@
                 informationData: [],
 
                 customerNameList: [], //客户名称集合
+                projectUrl: '', // 项目根路径
             }
         },
         created() {
             var _this = this;
             _this.getList(true);
             _this.getUser();
+            _this.projectUrl = process.env.VUE_APP_API_BASE_URL;
         },
         methods: {
             handleInput() {
@@ -516,15 +519,18 @@
                 });
             },
             downloadInform(row) {
+                var _this = this;
                 console.log("下载" + JSON.stringify(row));
                 const fileName = row.originalFilename;
                 const isShow = this.isShowFile(fileName);
                 if (isShow) {
                     // 图片跳转另一个标签页打开测试
-                    window.open(row.url, '_blank')
+                    // window.open(row.url, '_blank');
+                    window.open(_this.projectUrl + row.fileName, '_blank')
                 } else {
                     // 非图片直接下载
-                    window.location.href = row.url
+                    // window.location.href = row.url
+                    window.location.href = _this.projectUrl + row.fileName;
                 }
             },
             isShowFile(fileName) {
