@@ -24,13 +24,13 @@
                     </el-table-column>
                     <el-table-column label="描述" align="center" width="200">
                         <template slot-scope="scope" >
-                             <p v-html="scope.row.description
+                             <!-- <p v-html="scope.row.description
                              +scope.row.coltage
                              +scope.row.cct
                              +scope.row.watts
-                             +scope.row.cri"></p>
-                           <!--  <p v-html="combinationStr(scope.row.description,scope.row.coltage,scope
-                             .row.cct,scope.row.watts,scope.row.cri)"/> -->
+                             +scope.row.cri"></p> -->
+                            <p v-html="combinationStr(scope.row.description,scope.row.coltage,scope
+                             .row.cct,scope.row.watts,scope.row.cri)"/>
                         </template>
                     </el-table-column>
                     <el-table-column label="当前状态" align="center" key="currentStatus" prop="currentStatus"/>
@@ -212,7 +212,7 @@
                     "factoryAnalysis": "竞品分析",
                     "projectLeader": "杜工/朱晓军",
                     "remarks": "给到杜工 2024.1.30给到邱工",
-                    }
+                }
                 ],
                 tableLoading: false,
             }
@@ -220,7 +220,7 @@
         methods: {
             /** 组合字符 */
             combinationStr(description,coltage,cct,watts,cri){
-                return description+"<br/>"+coltage+"<br/>"+cct+"<br/>"+watts+"<br/>"+cri
+                return description+"-"+coltage+"-"+cct+"-"+watts+"-"+cri
             }
         }
     }
