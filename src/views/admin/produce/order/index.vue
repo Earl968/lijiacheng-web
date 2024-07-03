@@ -91,7 +91,9 @@
                     </el-table-column>
                     <el-table-column label="产品变动" align="center" key="productUpdate" prop="productUpdate">
                         <template slot-scope="scope">
-                            <el-link type="primary" @click="showProductUpdate(scope.row)">产品变动</el-link>
+                            <el-link v-if="showProductUpdateBtn(scope.row)" type="danger"
+                                @click="showProductUpdate(scope.row)">产品变动</el-link>
+                            <el-link v-else type="info">无变动</el-link>
                         </template>
                     </el-table-column>
                     <el-table-column label="客户投诉" align="center" key="customerComplaints" prop="customerComplaints">
@@ -130,11 +132,11 @@
 </template>
 <style>
     .el-table .success-row {
-        background: #f0f9eb;
+        background: #9de973;
     }
 
     .el-table .success-row tr {
-        background: #f0f9eb;
+        background: #9de973;
     }
 
     .priceTable {
@@ -405,6 +407,13 @@
                         message: '已取消'
                     });
                 });
+            },
+            showProductUpdateBtn(row) {
+                if (row.productUpdate === "") {
+                    return true;
+                } else {
+                    return false;
+                }
             },
             // 展示配方变化
             showProductUpdate(row) {
