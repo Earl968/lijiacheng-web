@@ -192,7 +192,7 @@
         justify-content: center;
         align-items: center;
         height: 100%;
-        background-image: url("../assets/images/login-background.jpg");
+        background-image: url("../assets/images/login-background.png");
         background-size: cover;
     }
 
@@ -204,7 +204,8 @@
 
     .login-form {
         border-radius: 6px;
-        background: #ffffff;
+        // background: #ffffff;
+        background-color: rgba(255,255,255,0.5);
         width: 400px;
         padding: 25px 25px 5px 25px;
 
