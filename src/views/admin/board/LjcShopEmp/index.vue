@@ -16,20 +16,18 @@
             </el-col>
 
             <el-col :span="6" v-for="item in info">
-                <el-card :body-style="{ padding: '0px' }" style="text-align: center;">
-                    <div class="card-top">
-                        <span>{{ item.position }}</span>
-                    </div>
-                    <img :src="item.empPhoto" class="image" style="object-fit: none;">
-                    <div style="padding: 14px;">
-                        <span>{{ item.empName }}</span>
-                        </br>
-                        <span>{{ item.empPhone }}</span>
-                        <div class="bottom clearfix">
-
-                            <el-button type="text" class="button" @click="showUpdateInfo(item)">操作按钮</el-button>
+                <el-card :body-style="{ padding: '0px' }"  style="text-align: center;" >
+                    <el-button type="text" @click="showUpdateInfo(item)" style="width: 100%;">
+                        <div class="card-top">
+                            <span>{{ item.position }}</span>
                         </div>
-                    </div>
+                        <img :src="item.empPhoto" class="image" style="object-fit: none;">
+                        <div style="padding: 14px;">
+                            <span>{{ item.empName }}</span>
+                            </br>
+                            <span>{{ item.empPhone }}</span>
+                        </div>
+                    </el-button>
                 </el-card>
             </el-col>
 
@@ -181,15 +179,18 @@
             },
             //修改用户信息
             modibyEmpInfo(){
-                updateShopEmp(this.needModifyInfo).then(response => {
-                    this.openModify=false;
-                    if (response.code == 200) {
-
-                        this.loadShopEmp();
-                    } else {
-                        console.log("未查询到对应的照片信息");
-                    }
-                })
+                this.$confirm('确认修改?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'},
+                ).then(() => {
+                  //确认修改
+                  updateShopEmp(this.needModifyInfo).then(response => {
+                      this.openModify=false;
+                      if (response.code == 200) {
+                          this.loadShopEmp();
+                      } else {
+                          console.log("未查询到对应的照片信息");
+                      }
+                  })
+                }).catch(() => {this.$message({type: 'info',message: '已取消'});});
             },
             //上传文件
             handleAvatarSuccess(response, file, fileList) {
