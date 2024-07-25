@@ -25,6 +25,7 @@
                         <div style="padding: 14px;">
                             <span>{{ item.empName }}</span>
                             </br>
+                            </br>
                             <span>{{ item.empPhone }}</span>
                         </div>
                     </el-button>
@@ -179,6 +180,7 @@
             },
             //修改用户信息
             modibyEmpInfo(){
+
                 this.$confirm('确认修改?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'},
                 ).then(() => {
                   //确认修改
@@ -197,6 +199,7 @@
                 // 如果上传成功
                 if (response.code == 200) {
                     this.needModifyInfo.empPhoto=response.data.fileName;
+                    this.needModifyInfo.updataImg = true;
                 } else {
                     this.$message.error("文件上传失败:" + response.msg);
                 }
