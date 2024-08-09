@@ -169,7 +169,7 @@
                 GetShopEmp({line:_this.lineValue}).then(response => {
                     if (response.data != null) {
                         _this.info = response.data;
-                        console.log(response.data);
+                        //console.log(response.data);
                     } else {
                         console.log("未查询到对应的照片信息");
                     }
@@ -180,7 +180,7 @@
             },
             //修改用户信息
             modibyEmpInfo(){
-
+                console.log(this.needModifyInfo);
                 this.$confirm('确认修改?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'},
                 ).then(() => {
                   //确认修改
@@ -199,7 +199,7 @@
                 // 如果上传成功
                 if (response.code == 200) {
                     this.needModifyInfo.empPhoto=response.data.fileName;
-                    this.needModifyInfo.updataImg = true;
+                    this.needModifyInfo.updateImg = true;
                 } else {
                     this.$message.error("文件上传失败:" + response.msg);
                 }
