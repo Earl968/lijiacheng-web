@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="23">
             <el-col :span="24" :xs="24">
-                <el-button type="text" @click="uploadDialog = true">点击上传</el-button>
+                <el-button v-if="showUpload" type="text" @click="uploadDialog = true">点击上传</el-button>
 
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="文件名称">
@@ -75,7 +75,8 @@
         insertEsop,
         GetEsopDataByName,
         RemoveEsopDataByName,
-        indexDOMContentLoaded
+        indexDOMContentLoaded,
+        checkUserKey
     } from "@/api/admin/board/sopKanban"
 
     export default {
@@ -86,6 +87,7 @@
                uploadUrl: process.env.VUE_APP_BASE_API + "/Video/upload",
                uploadDialog: false,
                successDialog: false,
+               showUpload: false,
                queryText: "",
                sop: {
                    sopname: "",
@@ -97,9 +99,18 @@
             indexDOMContentLoaded();
         },
         created() {
+            this.showUploadFun();
             this.loadEsopData();
         },
         methods: {
+            //是否显示上传按钮
+            showUploadFun(){
+                checkUserKey().then(response => {
+                    if (response.code === 200) {
+                        this.showUpload = true;
+                    }
+                })
+            },
             //加载数据
             loadEsopData() {
                 GetEsopData().then(response => {
@@ -148,7 +159,7 @@
             //需要展示内容
             openPlay(row) {
                 // 这里假设你的Vue应用运行在当前域名的根路径下
-                const url = "http://localhost:8088/index?url=" + row.uploadlocation;
+                const url = "http://192.168.16.203:9093/index?url=" + row.uploadlocation;
                 window.open(url, '_blank');
             },
             //单条查询
@@ -184,6 +195,7 @@
                 //event.preventDefault();
                 //console.log(111);
             },
+            //时间转换函数
             formatDate(date, format) {
               const year = date.getFullYear();
               const month = (date.getMonth() + 1).toString().padStart(2, '0');

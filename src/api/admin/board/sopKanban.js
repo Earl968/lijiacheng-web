@@ -8,6 +8,13 @@ export function GetEsopData() {
     })
 }
 
+export function checkUserKey() {
+    return request({
+        url: '/admin/prm/sopinfo/checkUserKey',
+        method: 'post'
+    })
+}
+
 export function GetEsopDataByName(data) {
     return request({
         url: '/admin/prm/sopinfo/selectById',
