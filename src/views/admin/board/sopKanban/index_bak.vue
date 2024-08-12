@@ -2,6 +2,7 @@
     <div class="app-container">
         <el-row :gutter="23">
             <el-col :span="24" :xs="24">
+                <!--上传按钮-->
                 <el-button type="text" @click="uploadDialog = true">点击上传</el-button>
 
                 <el-form :inline="true" class="demo-form-inline">
@@ -13,28 +14,24 @@
                         <el-button type="primary" @click="onSubmit">查询</el-button>
                     </el-form-item>
                 </el-form>
-            </el-col>
-            <el-col :span="24" :xs="24">
-                <section>
-                   <div class="max-w-5xl mx-auto px-8">
-                       <div class="card-wraper">
-                           <div class="background" id="background"></div>
-                           <a href="javascript:void(0)" @click="openPlay(item)" v-for="item in cardData" class="card relative group block p-2 h-full w-full">
-                               <el-card class="card-main">
-                                   <h3>{{ item.sopname }}</h3>
-                                   <img src="@/assets/images/file-pdf.png" class="img">
-                                   <p>{{ item.uploadbyname }}</p>
-                                   <div class="bottom clearfix">
-                                     <time class="time">{{ formatDate(new Date(item.uploadbytime), 'YYYY-MM-DD HH:mm:ss') }}</time>
-                                     <el-button type="text" class="button" @click.stop="deleteEsop(item)">删除</el-button>
-                                   </div>
-                               </el-card>
-                           </a>
-                        </div>
-                   </div>
-                </section>
-            </el-col>
-            <el-col :span="24" :xs="24">
+
+                <!--表格信息-->
+                <el-table :data="tableData" border style="width: 100%">
+                    <el-table-column prop="sopname" label="文件名称" width="180">
+                        <template slot-scope="scope">
+                            <el-link type="warning"
+                                @click.native="openPlay(scope.row)">{{ scope.row.sopname }}</el-link>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="uploadbyname" label="上传人" width="180"></el-table-column>
+                    <el-table-column prop="uploadbytime" label="上传时间"></el-table-column>
+                    <el-table-column label="操作" width="180">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" @click="deleteEsop(scope.row)"
+                                circle></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
                 <!--上传信息-->
                 <el-dialog title="上传文件" :visible.sync="uploadDialog" width="30%" center>
                     <span>
@@ -64,39 +61,108 @@
     </div>
 </template>
 
+<style>
+    .upload-demo {
+        text-align: center;
+    }
 
+    .loader {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid rgba(165, 220, 134, 0.2);
+        border-left-color: #A5DC86;
+        animation: animation_collect 1s linear 1 both;
+    }
+    .font-36{
+        text-align: center;
+        font-size: 36;
+    }
+    @keyframes animation_collect {
+        0% {
+            transform: rotate(270deg);
+            border-left-color: #A5DC86;
+        }
 
-<style scoped src="@/style/demo.css"></style>
-<!-- <style scoped src="@/style/main.css"></style> -->
+        25% {
+            border-left-color: #A5DC86;
+        }
+
+        50% {
+            border-left-color: #A5DC86;
+        }
+
+        75% {
+            border-left-color: #A5DC86;
+        }
+
+        100% {
+            border-left-color: rgba(165, 220, 134, 0.2);
+            transform: rotate(0deg);
+        }
+    }
+
+    .loader::before {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 15px;
+        border: 4px solid #A5DC86;
+        border-left-width: 0;
+        border-bottom-width: 0;
+        transform: scaleX(-1) rotate(135deg);
+        transform-origin: left top;
+        animation: animation_true 0.5s 1s linear 1 both;
+        opacity: 0;
+    }
+
+    @keyframes animation_true {
+        0% {
+            opacity: 0;
+            width: 0px;
+            height: 0px;
+        }
+
+        33% {
+            opacity: 1;
+            width: 20px;
+            height: 0px;
+        }
+
+        100% {
+            opacity: 1;
+            width: 20px;
+            height: 40px;
+        }
+    }
+</style>
 
 <script>
     import {
         GetEsopData,
         insertEsop,
         GetEsopDataByName,
-        RemoveEsopDataByName,
-        indexDOMContentLoaded
+        RemoveEsopDataByName
     } from "@/api/admin/board/sopKanban"
 
     export default {
-        name: "newindex",
+        name: "sopKanban",
         data() {
-           return {
-               cardData: [],
-               uploadUrl: process.env.VUE_APP_BASE_API + "/Video/upload",
-               uploadDialog: false,
-               successDialog: false,
-               queryText: "",
-               sop: {
-                   sopname: "",
-                   uploadlocation: ""
-               },
-           }
-        },
-        updated() {
-            indexDOMContentLoaded();
+            return {
+                tableData: [],
+                uploadUrl: process.env.VUE_APP_BASE_API + "/Video/upload",
+                uploadDialog: false,
+                successDialog: false,
+                queryText: "",
+                sop: {
+                    sopname: "",
+                    uploadlocation: ""
+                },
+            }
         },
         created() {
+            var _this = this;
             this.loadEsopData();
         },
         methods: {
@@ -104,7 +170,7 @@
             loadEsopData() {
                 GetEsopData().then(response => {
                     if (response.data != null) {
-                        this.cardData = response.data.list;
+                        this.tableData = response.data.list;
                     } else {
                         console.log("无文件上传数据！");
                     }
@@ -162,7 +228,7 @@
                     id: this.queryText
                 }).then(response => {
                     if (response.data != null) {
-                        this.cardData = [response.data];
+                        this.tableData = [response.data];
                     } else {
                         console.log("无文件上传数据！");
                     }
@@ -181,29 +247,7 @@
                 }).catch(() => {
                     this.$message({type: 'info',message: '已取消'});
                 });
-                //event.preventDefault();
-                //console.log(111);
-            },
-            formatDate(date, format) {
-              const year = date.getFullYear();
-              const month = (date.getMonth() + 1).toString().padStart(2, '0');
-              const day = date.getDate().toString().padStart(2, '0');
-              const hours = date.getHours().toString().padStart(2, '0');
-              const minutes = date.getMinutes().toString().padStart(2, '0');
-              const seconds = date.getSeconds().toString().padStart(2, '0');
-
-              return format
-                .replace('YYYY', year)
-                .replace('MM', month)
-                .replace('DD', day)
-                .replace('HH', hours)
-                .replace('mm', minutes)
-                .replace('ss', seconds);
             }
         }
     }
 </script>
-
-
-
-
