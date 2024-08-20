@@ -3,131 +3,101 @@ import request from '@/utils/request'
 // 查询所有sop数据
 export function GetEsopData() {
     return request({
-        url: '/admin/prm/sopinfo/list',
+        url: '/admin/prm/ljcShopjitGongyifile/list',
         method: 'get'
     })
 }
 
-export function checkUserKey() {
+// 按文件名模糊查询
+export function GetEsopLikeByName(FileName) {
     return request({
-        url: '/admin/prm/sopinfo/checkUserKey',
-        method: 'post'
+        url: '/admin/prm/ljcShopjitGongyifile/listLike',
+        method: 'get',
+        params: FileName
     })
 }
 
-export function GetEsopDataByName(data) {
-    return request({
-        url: '/admin/prm/sopinfo/selectById',
-        method: 'post',
-        params: data
-    })
-}
-
-export function RemoveEsopDataByName(data) {
-    return request({
-        url: '/admin/prm/sopinfo/deleteById',
-        method: 'post',
-        params: data
-    })
-}
-
-export function insertEsop(data) {
-    return request({
-        url: '/admin/prm/sopinfo/insert',
-        method: 'post',
-        params: data
-    })
-}
-
-export function indexDOMContentLoaded(){
-        var cards = document.querySelectorAll("a.card");
-        var background = document.querySelector(".background");
-
-        // Store the index of the last hovered card
-        var lastHoveredCardIndex = localStorage.getItem("lastHoveredCardIndex") || 0;
-        // Set the background to the last hovered card by default
-        var cardRect = cards[lastHoveredCardIndex].getBoundingClientRect();
-        // var x = cardRect.left + window.scrollX + cardRect.width / 2;
-        // var y = cardRect.top + window.scrollY + cardRect.height / 2;
-
-        var x = cardRect.left  + cardRect.width / 2;
-        var y = cardRect.top  + cardRect.height / 2;
 
 
-        background.style.width = cardRect.width + "px";
-        background.style.height = cardRect.height + "px";
-        background.style.transform = `translate(${x - cardRect.width / 2}px, ${y - cardRect.height / 2}px)`;
-        background.style.opacity = "0"; // Set opacity to 0 when the page loads
+// // 查询所有sop数据
+// export function GetEsopData() {
+//     return request({
+//         url: '/admin/prm/sopinfo/list',
+//         method: 'get'
+//     })
+// }
 
-        cards.forEach(function(card, index) {
-            card.addEventListener("mouseenter", function(e) {
-                // If the card is zoomed in, return early to prevent the hover effect
-                if (card.classList.contains("zoomed")) {
-                    return;
-                }
+// export function checkUserKey() {
+//     return request({
+//         url: '/admin/prm/sopinfo/checkUserKey',
+//         method: 'post'
+//     })
+// }
 
-                var rect = card.getBoundingClientRect();
+// export function GetEsopDataByName(data) {
+//     return request({
+//         url: '/admin/prm/sopinfo/selectById',
+//         method: 'post',
+//         params: data
+//     })
+// }
 
-                background.style.width = rect.width + "px";
-                background.style.height = rect.height + "px";
-                background.style.transform = `translate(${ card.offsetLeft  }px, ${ card.offsetTop }px)`;
-                background.style.opacity = "1"; // Change opacity to 1 when a card is hovered over
-                background.style.top = "0%";
-                background.style.left = "0%";
-                background.style.transformOrigin = "center";
-                // Store the index of the hovered card
-                //localStorage.setItem("lastHoveredCardIndex", index);
-            });
+// export function RemoveEsopDataByName(data) {
+//     return request({
+//         url: '/admin/prm/sopinfo/deleteById',
+//         method: 'post',
+//         params: data
+//     })
+// }
 
-            card.addEventListener("mouseleave", function(e) {
-                background.style.opacity = "0"; // Change opacity back to 0 when the mouse leaves a card
-                // Reset the background size when the mouse leaves the card
-                background.style.width = "0px";
-                background.style.height = "0px";
-            });
+// export function insertEsop(data) {
+//     return request({
+//         url: '/admin/prm/sopinfo/insert',
+//         method: 'post',
+//         params: data
+//     })
+// }
 
-            // card.addEventListener("click", function() {
-            //     if (card.classList.contains("zoomed")) {
-            //         card.classList.remove("zoomed");
-            //         card.style.transform = "none";
-            //         card.style.position = "relative";
-            //         card.style.width = "unset";
-            //         card.style.height = "unset";
-            //         card.style.top = "0";
-            //         card.style.left = "0";
-            //         card.style.zIndex = "0";
+// export function indexDOMContentLoaded(){
+//         var cards = document.querySelectorAll("a.card");
+//         var background = document.querySelector(".background");
 
-            //         // Remove the 'overflow' class from the body when a card is unzoomed
-            //         document.body.classList.remove("overflow");
+//         // Store the index of the last hovered card
+//         var lastHoveredCardIndex = localStorage.getItem("lastHoveredCardIndex") || 0;
+//         // Set the background to the last hovered card by default
+//         var cardRect = cards[lastHoveredCardIndex].getBoundingClientRect();
 
-            //         // Remove the 'opacity-0' class from other <a> tags when a card is unzoomed
-            //         cards.forEach(function(otherCard) {
-            //             if (otherCard !== card) {
-            //                 otherCard.classList.remove("opacity-0");
-            //             }
-            //         });
-            //     } else {
-            //         card.classList.add("zoomed");
-            //         card.style.position = "fixed";
-            //         card.style.top = "50%";
-            //         card.style.left = "50%";
-            //         requestAnimationFrame(function() {
-            //             card.style.transform = "translate(-50%, -50%)";
-            //         });
-            //         card.style.width = "90%";
-            //         card.style.height = "90%";
-            //         card.style.zIndex = "1000";
+//         var x = cardRect.left  + cardRect.width / 2;
+//         var y = cardRect.top  + cardRect.height / 2;
 
-            //         // Add the 'overflow' class to the body when a card is zoomed
-            //         document.body.classList.add("overflow");
 
-            //         // Add the 'opacity-0' class to other <a> tags when a card is zoomed
-            //         cards.forEach(function(otherCard) {
-            //             if (otherCard !== card) {
-            //                 otherCard.classList.add("opacity-0");
-            //             }
-            //         });
-            //     }
-            // });
-        });
-}
+//         background.style.width = cardRect.width + "px";
+//         background.style.height = cardRect.height + "px";
+//         background.style.transform = `translate(${x - cardRect.width / 2}px, ${y - cardRect.height / 2}px)`;
+//         background.style.opacity = "0"; // Set opacity to 0 when the page loads
+
+//         cards.forEach(function(card, index) {
+//             card.addEventListener("mouseenter", function(e) {
+//                 // If the card is zoomed in, return early to prevent the hover effect
+//                 if (card.classList.contains("zoomed")) {
+//                     return;
+//                 }
+
+//                 var rect = card.getBoundingClientRect();
+
+//                 background.style.width = rect.width + "px";
+//                 background.style.height = rect.height + "px";
+//                 background.style.transform = `translate(${ card.offsetLeft  }px, ${ card.offsetTop }px)`;
+//                 background.style.opacity = "1"; // Change opacity to 1 when a card is hovered over
+//                 background.style.top = "0%";
+//                 background.style.left = "0%";
+//                 background.style.transformOrigin = "center";
+//             });
+
+//             card.addEventListener("mouseleave", function(e) {
+//                 background.style.opacity = "0"; // Change opacity back to 0 when the mouse leaves a card
+//                 background.style.width = "0px";
+//                 background.style.height = "0px";
+//             });
+//         });
+// }
