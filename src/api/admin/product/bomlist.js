@@ -18,11 +18,25 @@ export function GetBomQuery(params) {
     }
 }
 
-export function DownLoadBom(params) {
+export function getCustNames() {
     return request({
-        url: '/admin/erp/bomlist/downLoadBoms',
-        method: 'get',
-        params: params
+        url: '/admin/erp/cust/getCustNames',
+        method: 'get'
     })
 }
 
+export function GetManHoursByPartno(data) {
+    return request({
+        url: '/admin/incompleteproductmanhour/selectByPartnos',
+        method: 'post',
+        data: data,
+    })
+}
+
+export function ModifyManHours(data) {
+    return request({
+        url: '/admin/incompleteproductmanhour/update',
+        method: 'post',
+        data: data,
+    })
+}
