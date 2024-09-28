@@ -13,7 +13,7 @@
                 <el-table :data="tableData" border style="width: 100%" ref="table"
                     v-loading="tableLoading" element-loading-text="正在查询数据"
                     element-loading-spinner="el-icon-loading" element-loading-background="rgba(217, 217, 217, 0.8)">
-                    <el-table-column label="订单号" prop="订单号"></el-table-column>
+                    <el-table-column label="订单号"  prop="订单号"></el-table-column>
                     <el-table-column label="客户名称" prop="客户名称"></el-table-column>
                     <el-table-column label="成品编码" prop="成品编码"></el-table-column>
                     <el-table-column label="规格型号" prop="规格型号">
@@ -94,27 +94,21 @@
                  this.$nextTick(() => {
                     const table = this.$refs.table.$el.querySelector('.el-table__body-wrapper table');
                     if (table) {
-                        // 创建一个临时的div来容纳整个表格（包括表头）
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = table.outerHTML;
-
-                        // 将表格转换为工作簿对象
-                        const wb = XLSX.utils.table_to_book(tempDiv);
-                        // 获取工作表
-                        const ws = wb.Sheets[wb.SheetNames[0]];
-                        // 设置表头
-                        const columnNames = this.tableData[0] ? Object.keys(this.tableData[0]) : [];
-
-                          // 设置第一行为表格的列名数据
-                        columnNames.forEach((columnName, index) => {
-                            console.log(index,columnName)
-                            ws[XLSX.utils.encode_cell({ c: index, r: 0 })] = { v: columnName, t: 's' };
-                        });
-
-                        // 导出Excel文件
-                        XLSX.writeFile(wb, 'table_data.xlsx');
+                         // 创建新的table元素
+                        var print_table_dom = document.createElement('table')
+                        // copy一份thead
+                        var print_table_dom_thead = this.$refs.table.$el.querySelector('.el-table__header-wrapper table').cloneNode(true)
+                        // copy一份tbody
+                        var print_table_body = this.$refs.table.$el.querySelector('.el-table__body-wrapper table').cloneNode(true)
+                        // 将thead和tbody添加到 目标table中
+                        print_table_dom.appendChild(print_table_dom_thead)
+                        print_table_dom.appendChild(print_table_body)
+                        // 生成 book
+                        const new_sheet = XLSX.utils.table_to_book(print_table_dom)
+                        // 导出excel
+                        XLSX.writeFile(new_sheet, '数据导出.xlsx')
                     } else {
-                     console.error('Table element not found');
+                        console.error('表格没有数据！');
                     }
                  });
             },
