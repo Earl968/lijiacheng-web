@@ -245,7 +245,7 @@
             <br/>
             <el-form-item label-position="right">
                 <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                <el-button>取消</el-button>
+                <el-button @click="cancel">取消</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -286,6 +286,9 @@ export default {
         }
     },
     created() {
+        let _this = this;
+        _this.addCustom = {};
+        _this.addCustom.objId = 1;
     },
     methods: {
         onSubmit() {
@@ -297,6 +300,9 @@ export default {
                 console.log("增加客户异常");
             });
             console.log(JSON.stringify(this.addCustom));
+        },
+        cancel(){
+            this.$emit('form-cancel');
         },
         handleSelect(key, keyPath) {
             console.log(key, keyPath);

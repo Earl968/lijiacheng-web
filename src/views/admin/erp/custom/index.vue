@@ -35,123 +35,23 @@
                                    @click="getCustomerList(true)">搜索
                         </el-button>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button icon="el-icon-search" size="mini" type="primary"
+                                   @click="addCustom">新增
+                        </el-button>
+                    </el-form-item>
                 </el-form>
 
                 <!-- 新增订单 -->
-                <!--                <el-dialog :visible.sync="addCustomVisible" :title="addCustomTitle" width="50%">
-                                    <el-menu :default-active="addShowIndex" class="el-menu-demo" mode="horizontal"
-                                             @select="handleSelect">
-                                        <el-menu-item index="1">基础</el-menu-item>
-                                        <el-menu-item index="2">账款</el-menu-item>
-                                        <el-menu-item index="3">交易</el-menu-item>
-                                        <el-menu-item index="4">营业</el-menu-item>
-                                        <el-menu-item index="5">贸易</el-menu-item>
-                                        <el-menu-item index="6">海关</el-menu-item>
-                                        <el-menu-item index="7">其他</el-menu-item>
-                                    </el-menu>
-                                    <el-form :inline="true" ref="form" :model="addCustom" label-width="80px" style="margin-top: 10px;">
-                                        <el-form-item label="公司全称" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder="公司全称"/>
-                                        </el-form-item>
-                                        <el-form-item label="公司简称" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder="公司简称"/>
-                                        </el-form-item>
-                                        <el-form-item label="区域" v-show="addShowIndex==='1'">
-                                            <el-select v-model="addCustom.customLevel" clearable placeholder="客户等级"
-                                                       style="width: 210px">
-                                                <el-option v-for="level in customLevels" :key="level.dbLevel" :label="level.level"
-                                                           :value="level.dbLevel"/>
-                                            </el-select>
-                                        </el-form-item>
-                                        <el-form-item label="负责人员" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="联络人-1" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="联络人-2" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="会计" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="电话-1" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="电话-2" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="统一编码" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="客户等级" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="传真机" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="纳税资格" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="纳税人识别号" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="行业别" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="发票类型" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="发票名称" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="发票地址" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="公司地址" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="邮政编码" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="起始往来" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="客户税率" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="集团分公司" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="审核人员" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="是否是快递商" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="单部门" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-                                        <el-form-item label="部门群组" v-show="addShowIndex==='1'">
-                                            <el-input v-model="addCustom.name" placeholder=""/>
-                                        </el-form-item>
-
-                                        <el-form-item label="活动名称2" v-show="addShowIndex==='2'">
-                                            <el-input v-model="addCustom.name"/>
-                                        </el-form-item>
-
-                                        <el-form-item>
-                                            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                                            <el-button>取消</el-button>
-                                        </el-form-item>
-                                    </el-form>
-                                </el-dialog>-->
-                <el-dialog :title="addCustomTitle" :visible.sync="addCustomVisible" width="55%">
+                <el-dialog :title="addCustomTitle" :visible.sync="addCustomVisible" width="55%"
+                           :close-on-click-modal="false"
+                           @close="clearChild">
                     <!-- 动态组件 -->
                     <child-component :is="addCustomCom"
                                      :parentCustomAreas="customAreas"
                                      :parentCustomBanks="customBanks"
                                      :parentCustomLevels="customLevels"
+                                     @form-cancel="handleSubmit"
                                      @form-submitted="handleSubmit"></child-component>
                 </el-dialog>
 
@@ -221,11 +121,11 @@ export default {
             showSearch: true,
             // 数据总条数
             total: 0,
-            addCustomVisible: true,
+            addCustomVisible: false,
             // 新增窗口弹出标题
             addCustomTitle: '新增客户',
             // 新增窗口调用组件
-            addCustomCom: addForm,
+            addCustomCom: null,
             // 搜索条件
             queryParams: {
                 customText: '',
@@ -324,7 +224,19 @@ export default {
         },
         handleSubmit() {
             console.log("提交数据了")
-        }
+            let _this = this;
+            _this.addCustomVisible = false;
+            _this.clearChild();
+        },
+        addCustom() {
+            let _this = this;
+            _this.addCustomVisible = true;
+            _this.addCustomCom = addForm;
+        },
+        clearChild() {
+            let _this = this;
+            _this.addCustomCom = null;
+        },
     },
 }
 </script>
