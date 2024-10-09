@@ -34,6 +34,7 @@
                     <el-table-column label="完成日期" prop="完成日期"></el-table-column>
                     <el-table-column label="后段需求时间" prop="后段需求时间"></el-table-column>
                     <el-table-column label="制令单号" prop="制令单号"></el-table-column>
+                    <el-table-column label="明细" prop="明细"></el-table-column>
                     <el-table-column label="备注" prop="备注"></el-table-column>
                 </el-table>
             </el-col>
