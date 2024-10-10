@@ -20,7 +20,7 @@ export function GetBomQuery(params) {
 
 export function getCustNames() {
     return request({
-        url: '/admin/erp/cust/getCustNames',
+        url: '/admin/erp/custom/getCustNames',
         method: 'get'
     })
 }
