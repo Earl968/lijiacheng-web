@@ -26,58 +26,68 @@
                     </el-form-item>
                 </el-form>
 
-                <el-table :data="OrderCostOverview"
-                    :row-class-name="tableRowClassName"
-                    height="700"
-                    border v-loading="tableLoading"
-                    @row-dblclick="OnDetail"
-                    element-loading-text="正在查询数据"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(217, 217, 217, 0.8)"
-                    @cell-mouse-enter="handleCellEnter"
-                    @cell-mouse-leave="handleCellLeave"
-                    @cell-click="handleCellClick">
-                    <el-table-column label="订单批号" prop="orderBatchNumber" width="120"> </el-table-column>
-                    <el-table-column label="物料编码" prop="materialCode" width="130"> </el-table-column>
-                    <el-table-column label="物料规格" prop="materialSpecification">
-                        <template slot-scope="scope">
-                            <div class="item__nowrap" :title="scope.row.materialSpecification">
-                                {{ scope.row.materialSpecification }}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="增加日期" prop="additionDate">
-                        <template slot-scope="scope">
-                            <div class="item__nowrap" :title="scope.row.additionDate">{{ scope.row.additionDate }}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="客户名称" prop="customerName"></el-table-column>
-                    <el-table-column label="订单数量" prop="orderQuantity"></el-table-column>
-                    <el-table-column label="汇率" prop="exchangeRate"></el-table-column>
-                    <el-table-column label="税率" prop="taxRate"></el-table-column>
-                    <el-table-column label="材料小记" prop="materialSubtotal"></el-table-column>
-                    <el-table-column label="人工小记" prop="laborSubtotal"></el-table-column>
-                    <el-table-column label="其他小记" prop="otherSubtotal"></el-table-column>
-                    <el-table-column label="单价(原币)" prop="unitPriceOriginalCurrency"></el-table-column>
-                    <el-table-column label="单价(折本币)" prop="unitPriceConvertedCurrency"></el-table-column>
-                    <el-table-column label="折美元" prop="convertedToUsd"></el-table-column>
-                    <el-table-column label="售价" prop="sellingPrice"></el-table-column>
-                    <el-table-column label="成本合计(折本币)" prop="totalCostConvertedCurrency"></el-table-column>
-                    <el-table-column label="净利润(折本币)" prop="netProfitConvertedCurrency"></el-table-column>
-                    <el-table-column label="备注" prop="remarks">
-                        <div class="item" slot-scope="scope">
-                            <el-input class="item__input" type="textarea" v-model="scope.row.remarks"
-                                placeholder="请输入内容"
-                                @blur="handleBlur(scope.row)"
-                                @keyup.enter.native.prevent="handleEnter(scope.row)"></el-input>
-                            <div class="item__txt item__nowrap" :title="scope.row.remarks">{{ scope.row.remarks }}</div>
-                        </div>
-                    </el-table-column>
-                </el-table>
+                <div class="table-container">
+                    <el-button plain class="table-toolbar-button" @click="exportToExcel">下载内容</el-button>
+                    <el-table :data="OrderCostOverview" ref="table"
+                        :row-class-name="tableRowClassName"
+                        height="780"
+                        border v-loading="tableLoading"
+                        @row-dblclick="OnDetail"
+                        element-loading-text="正在查询数据"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(217, 217, 217, 0.8)"
+                        @cell-mouse-enter="handleCellEnter"
+                        @cell-mouse-leave="handleCellLeave"
+                        @cell-click="handleCellClick">
 
+                        <el-table-column label="订单批号" prop="orderBatchNumber" width="120"> </el-table-column>
+                        <el-table-column label="物料编码" prop="materialCode" width="130"> </el-table-column>
+                        <el-table-column label="物料规格" prop="materialSpecification">
+                            <template slot-scope="scope">
+                                <div class="item__nowrap" :title="scope.row.materialSpecification">
+                                    {{ scope.row.materialSpecification }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="增加日期" prop="additionDate">
+                            <template slot-scope="scope">
+                                <div class="item__nowrap" :title="formatDate(scope.row.additionDate)">{{ formatDate(scope.row.additionDate) }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作日期" prop="editDate">
+                            <template slot-scope="scope">
+                                <div class="item__nowrap" :title="formatDate(scope.row.editDate)">{{ formatDate(scope.row.editDate) }}</div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="客户名称" prop="customerName"></el-table-column>
+                        <el-table-column label="订单数量" prop="orderQuantity"></el-table-column>
+                        <el-table-column label="汇率" prop="exchangeRate"></el-table-column>
+                        <el-table-column label="税率" prop="taxRate"></el-table-column>
+                        <el-table-column label="材料小记" prop="materialSubtotal"></el-table-column>
+                        <el-table-column label="人工小记" prop="laborSubtotal"></el-table-column>
+                        <el-table-column label="其他小记" prop="otherSubtotal"></el-table-column>
+                        <el-table-column label="单价(原币)" prop="unitPriceOriginalCurrency"></el-table-column>
+                        <el-table-column label="单价(折本币)" prop="unitPriceConvertedCurrency"></el-table-column>
+                        <el-table-column label="折美元" prop="convertedToUsd"></el-table-column>
+                        <el-table-column label="售价" prop="sellingPrice"></el-table-column>
+                        <el-table-column label="成本合计(折本币)" prop="totalCostConvertedCurrency"></el-table-column>
+                        <el-table-column label="净利润(折本币)" prop="netProfitConvertedCurrency"></el-table-column>
+                        <el-table-column label="备注" prop="remarks">
+                            <div class="item" slot-scope="scope">
+                                <el-input class="item__input" type="textarea" v-model="scope.row.remarks"
+                                    placeholder="请输入内容"
+                                    @blur="handleBlur(scope.row)"
+                                    @keyup.enter.native.prevent="handleEnter(scope.row)"></el-input>
+                                <div class="item__txt item__nowrap" :title="scope.row.remarks">{{ scope.row.remarks }}</div>
+                            </div>
+                        </el-table-column>
+                    </el-table>
+                </div>
                 <!-- 新增订单 -->
                 <el-dialog :visible.sync="showCoseDetail" width="80%" :close-on-click-modal="false" @close="clearChild">
                     <!-- 动态组件 -->
-                    <child-component :is="dialogDetail" :parentCostData="orderItm"></child-component>
+                    <child-component :is="dialogDetail"
+                        :parentCostData="orderItm"
+                        @form-submitted="handleSubmit"></child-component>
                 </el-dialog>
 
             </el-col>
@@ -86,6 +96,17 @@
 </template>
 
 <style>
+
+  .table-container {
+        position: relative;
+    }
+
+    .table-toolbar-button {
+        position: absolute;
+        top: -60px;
+        right: 10px;
+    }
+
     .item__nowrap {
         white-space: nowrap;
         /* 防止文本换行 */
@@ -97,6 +118,14 @@
 
     .el-table .success {
        background: #9de973;
+    }
+
+   /* .el-table .el-table__row {
+        height: 5px;
+    } */
+
+    .el-table .el-table__cell{
+        padding: 0px;
     }
 
     .item{
@@ -149,7 +178,13 @@
 
     import detail from './detail.vue'
 
+    import ExcelUploadParser from '@/components/ExcelUploadParser';
+    import * as XLSX from 'xlsx';
+
     export default {
+        components: {
+            ExcelUploadParser
+        },
         data() {
             return {
                 //订单号
@@ -178,6 +213,8 @@
                 editProp: [ 'remarks'],
                  // 保存进入编辑的cell
                 clickCellMap: {},
+                //是否提交修改时间
+                ifModiby:false,
             }
         },
         created(){
@@ -246,7 +283,6 @@
                 }
 
                 if(this.selectDate.length>0){
-                    console.log(this.selectDate);
                     getOverviewList({
                             startDate: this.selectDate[0],
                             endDate: this.selectDate[1]
@@ -260,6 +296,11 @@
             //订单成本明细-和子件成本明细表格显示
             OnDetail(row, event) {
                 this.orderItm = row.orderBatchNumber;
+                if(row.isedit===1){
+                    this.dialogDetail = detail;
+                    this.showCoseDetail = true;
+                    return;
+                }
                 modifyOverviewEdate({orderItm: this.orderItm})
                     .then(response => {
                         this.dialogDetail = detail;
@@ -268,7 +309,18 @@
             },
             //关闭详细编辑状态之后重新加载数据
             clearChild() {
+                if(this.ifModiby){
+                    modifyOverviewEdate({orderItm: this.orderItm})
+                        .then(response => {
+                            //日期已经更新
+                            this.ifModiby=false;
+                        })
+                }
                 this.OnQueryOrderView();
+            },
+            //触发提交事件，当子界面有提交数据后更新日期
+            handleSubmit(){
+                this.ifModiby=true;
             },
             //设置表格颜色
             tableRowClassName({row}){
@@ -346,6 +398,39 @@
                       this.cancelEditable(cell)
                     })
                     this.clickCellMap[id] = []
+                });
+            },
+            //格式化日期
+            formatDate(cellValue) {
+                if (!cellValue) return '';
+                const date = new Date(cellValue);
+                const year = date.getFullYear();
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+            },
+            //下载数据
+            exportToExcel(){
+                this.$nextTick(() => {
+
+                   const table = this.$refs.table.$el.querySelector('.el-table__body-wrapper table');
+                   if (table) {
+                        // 创建新的table元素
+                       var print_table_dom = document.createElement('table')
+                       // copy一份thead
+                       var print_table_dom_thead = this.$refs.table.$el.querySelector('.el-table__header-wrapper table').cloneNode(true)
+                       // copy一份tbody
+                       var print_table_body = this.$refs.table.$el.querySelector('.el-table__body-wrapper table').cloneNode(true)
+                       // 将thead和tbody添加到 目标table中
+                       print_table_dom.appendChild(print_table_dom_thead)
+                       print_table_dom.appendChild(print_table_body)
+                       // 生成 book
+                       const new_sheet = XLSX.utils.table_to_book(print_table_dom)
+                       // 导出excel
+                       XLSX.writeFile(new_sheet, '数据导出.xlsx')
+                   } else {
+                       console.error('表格没有数据！');
+                   }
                 });
             }
         }

@@ -61,8 +61,10 @@ export function getSubcomponentCost(data) {
 //根据订单号和行号查询对应订订单成本明细-和子件成本明细
 export function modifySubcomponentCost(data) {
     return request({
-        url: '/admin/erp/quotation/uploadSubcomponentCost',
+        url: '/admin/erp/quotation/updateSubcomponentCost',
         method: 'post',
         data: data
     })
 }
+
+
