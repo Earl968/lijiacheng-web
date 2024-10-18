@@ -27,7 +27,7 @@
                 </el-form>
 
                 <div class="table-container">
-                    <el-button plain class="table-toolbar-button" @click="exportToExcel">下载内容</el-button>
+                    <el-button plain class="table-toolbar-button" @click="exportToExcel" v-if="isDownLoad">下载内容</el-button>
                     <el-table :data="OrderCostOverview" ref="table"
                         :row-class-name="tableRowClassName"
                         height="780"
@@ -215,6 +215,8 @@
                 clickCellMap: {},
                 //是否提交修改时间
                 ifModiby:false,
+                //是否可以下载
+                isDownLoad:false,
             }
         },
         created(){
@@ -271,24 +273,37 @@
             },
             //选择行号之后点击查询，查询订单信息
             OnQueryOrderView() {
+
                 if(this.OredeNO.length > 0 && this.itmNo.length > 0){
+                    this.tableLoading=true;
                     getOrderCostOverview({
                             order: this.OredeNO,
                             itm: this.itmNo
                         })
                         .then(response => {
                             this.OrderCostOverview = [response.data];
+                            this.isDownLoad=true;
+                            this.tableLoading=false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
                         })
                     return;
                 }
 
                 if(this.selectDate.length>0){
+                    this.tableLoading=true;
                     getOverviewList({
                             startDate: this.selectDate[0],
                             endDate: this.selectDate[1]
                         })
                         .then(response => {
                             this.OrderCostOverview = response.data;
+                            this.isDownLoad=true;
+                            this.tableLoading=false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
                         })
                     return;
                 }

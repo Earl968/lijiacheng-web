@@ -2,13 +2,13 @@
     <div class="app-container">
         <el-row :gutter="24">
             <el-col :span="24" :xs="24">
-                <el-button plain @click="exportToExcel">下载内容</el-button>
+                <el-button plain @click="exportToExcel" v-if="isDownLoad">下载内容</el-button>
             </el-col>
         </el-row>
         <el-row :gutter="24" style="margin-top: 10px;">
             <el-col :span="24" :xs="24">
                 <el-table :data="SubcomponentCost" border :row-class-name="tableRowClassName"   height="800"
-                    element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading"
+                    element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading" v-loading="tableLoading"
                     element-loading-background="rgba(217, 217, 217, 0.8)" @cell-mouse-enter="handleCellEnter"
                     @cell-mouse-leave="handleCellLeave" @cell-dblclick="handleCellClick">
 
@@ -104,6 +104,8 @@
                 isEnterPressed: false ,
                 //项目路径
                 projectUrl: '',
+                tableLoading: false,
+                isDownLoad: false,
             }
         },
         created(){
@@ -115,10 +117,16 @@
             //查询表格数据
             QueryDetail(){
                 let order= this.orderItm.split('-');
+                this.tableLoading=true;
                 getSubcomponentCost( {order:order[0] ,itm:order[1] })
-                .then(response => {
-                        this.SubcomponentCost= response.data;
-                });
+                    .then(response => {
+                            this.SubcomponentCost= response.data;
+                            this.tableLoading=false;
+                            this.isDownLoad=true;
+                    })
+                    .catch(() => {
+                        this.tableLoading = false;
+                    });
             },
             //添加表格颜色
             tableRowClassName({row}) {
