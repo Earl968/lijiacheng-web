@@ -60,6 +60,8 @@
                             <div class="item__nowrap" :title="scope.row.highestPriceSupplier">{{ scope.row.highestPriceSupplier }}</div>
                         </template>
                     </el-table-column>
+
+                     <el-table-column label="部门名称" prop="deptName"></el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -106,7 +108,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .item__nowrap {
         white-space: nowrap;
         /* 防止文本换行 */

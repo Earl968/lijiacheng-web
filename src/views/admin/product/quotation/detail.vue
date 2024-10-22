@@ -7,10 +7,10 @@
         </el-row>
         <el-row :gutter="24" style="margin-top: 10px;">
             <el-col :span="24" :xs="24">
-                <el-table :data="SubcomponentCost" border :row-class-name="tableRowClassName"   height="800"
+                <el-table :data="SubcomponentCost" border height="800"
                     element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading" v-loading="tableLoading"
                     element-loading-background="rgba(217, 217, 217, 0.8)" @cell-mouse-enter="handleCellEnter"
-                    @cell-mouse-leave="handleCellLeave" @cell-dblclick="handleCellClick">
+                    @cell-mouse-leave="handleCellLeave" @cell-dblclick="handleCellClick" :cell-style="cellStyle">
 
                     <el-table-column v-if="false" label="dataType" prop="dataType"></el-table-column>
 
@@ -128,11 +128,19 @@
                         this.tableLoading = false;
                     });
             },
-            //添加表格颜色
-            tableRowClassName({row}) {
+            cellStyle({ row, column, rowIndex, columnIndex }) {
                 if (this.isyellow(row.dataType)) {
-                    return 'success-row';
+                    return {
+                        height:'30px  !important',
+                        background: '#ffff00',
+                        padding: '0px 0px'
+                    };
                 }
+              // 例如，设置日期列的单元格背景颜色
+                return {
+                    height:'30px  !important',
+                    padding: '0px 0px',
+                };
             },
             //判断数据是否能进行更改
             isyellow(str){
@@ -224,7 +232,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .item__nowrap {
         white-space: nowrap;
         /* 防止文本换行 */

@@ -28,8 +28,7 @@
 
                 <div class="table-container">
                     <el-button plain class="table-toolbar-button" @click="exportToExcel" v-if="isDownLoad">下载内容</el-button>
-                    <el-table :data="OrderCostOverview" ref="table"
-                        :row-class-name="tableRowClassName"
+                    <el-table :data="OrderCostOverview" ref="table" :cell-style="cellStyle"
                         height="780"
                         border v-loading="tableLoading"
                         @row-dblclick="OnDetail"
@@ -95,7 +94,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
 
   .table-container {
         position: relative;
@@ -114,18 +113,6 @@
         /* 隐藏溢出的内容 */
         text-overflow: ellipsis;
         /* 显示省略号 */
-    }
-
-    .el-table .success {
-       background: #9de973;
-    }
-
-   /* .el-table .el-table__row {
-        height: 5px;
-    } */
-
-    .el-table .el-table__cell{
-        padding: 0px;
     }
 
     .item{
@@ -265,6 +252,25 @@
                         this.itms = response.data;
                     })
             },
+            //设置表格颜色
+            tableRowClassName({row}){
+                if (row.isedit===1) {
+                    return 'success';
+                }
+            },
+            cellStyle({ row, column, rowIndex, columnIndex }) {
+                if (row.isedit===1) {
+                    return {
+                        height:'30px',
+                        background: '#9de973',
+                        padding: '0px 0px'
+                    };
+                }
+              // 例如，设置日期列的单元格背景颜色
+                return {
+                    height:'30px',
+                    padding: '0px 0px' };
+            },
             //清空输入选项
             Onclear(){
                 this.OredeNO='';
@@ -337,12 +343,7 @@
             handleSubmit(){
                 this.ifModiby=true;
             },
-            //设置表格颜色
-            tableRowClassName({row}){
-                if (row.isedit===1) {
-                    return 'success';
-                }
-            },
+
             //鼠标移入
             handleCellEnter (row, column, cell, event) {
               const property = column.property

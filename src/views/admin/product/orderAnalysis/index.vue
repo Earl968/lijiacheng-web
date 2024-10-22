@@ -45,7 +45,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
 
     .item__nowrap {
         white-space: nowrap;
