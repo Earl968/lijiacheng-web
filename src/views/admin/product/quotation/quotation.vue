@@ -86,7 +86,8 @@
                     <!-- 动态组件 -->
                     <child-component :is="dialogDetail"
                         :parentCostData="orderItm"
-                        @form-submitted="handleSubmit"></child-component>
+                        @form-submitted="handleSubmit"
+                        :key="dialogKey" ></child-component>
                 </el-dialog>
 
             </el-col>
@@ -204,6 +205,7 @@
                 ifModiby:false,
                 //是否可以下载
                 isDownLoad:false,
+                dialogKey: 0,
             }
         },
         created(){
@@ -319,12 +321,14 @@
                 this.orderItm = row.orderBatchNumber;
                 if(row.isedit===1){
                     this.dialogDetail = detail;
+                    this.dialogKey++;
                     this.showCoseDetail = true;
                     return;
                 }
                 modifyOverviewEdate({orderItm: this.orderItm})
                     .then(response => {
                         this.dialogDetail = detail;
+                        this.dialogKey++;
                         this.showCoseDetail = true;
                     })
             },

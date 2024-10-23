@@ -36,7 +36,7 @@
                 <!-- 新增订单 -->
                 <el-dialog :visible.sync="showCoseDetail" width="80%" :close-on-click-modal="false">
                     <!-- 动态组件 -->
-                    <child-component :is="dialogDetail"
+                    <child-component :is="dialogDetail" :key="dialogKey"
                         :parentCostData="order"></child-component>
                 </el-dialog>
 
@@ -81,6 +81,7 @@
                 dialogDetail: null,
                 //点击的订单批号
                 order: {},
+                dialogKey: 0,
             }
         },
         methods: {
@@ -107,6 +108,7 @@
                 this.order = row;
                 this.dialogDetail = detail;
                 this.showCoseDetail = true;
+                this.dialogKey++;
             },
 
         }
