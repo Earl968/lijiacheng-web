@@ -6,6 +6,9 @@
                     <el-form-item label="订单号">
                         <el-input v-model="OredeNO" placeholder="订单号"></el-input>
                     </el-form-item>
+                    <el-form-item label="成品编码">
+                        <el-input v-model="prdNumber" placeholder="成品编码"></el-input>
+                    </el-form-item>
 
                     <el-form-item>
                         <el-button type="primary" @click="OnQuery">查询</el-button>
@@ -61,7 +64,7 @@
 <script>
     import { Icon, Loading } from "element-ui";
 
-    import { getAnalysis } from "@/api/admin/product/orderAnalysis"
+    import { getAnalysis,getAnalysisByprdNo } from "@/api/admin/product/orderAnalysis"
 
     import detail from './detail.vue'
 
@@ -71,6 +74,8 @@
             return {
                 //订单号
                 OredeNO: '',
+                //成品编码
+                prdNumber: '',
                 //表格数据
                 OrderAnalysis: [],
                 //表格加载动画
@@ -88,6 +93,7 @@
             //清空输入选项
             Onclear(){
                 this.OredeNO='';
+                this.prdNumber='';
             },
             //选择行号之后点击查询，查询订单信息
             OnQuery() {
@@ -101,6 +107,20 @@
                         .catch(() => {
                             this.tableLoading = false;
                         })
+                    return;
+                }
+
+                if(this.prdNumber.length > 0){
+                    this.tableLoading=true;
+                    getAnalysisByprdNo({ prdNo: this.prdNumber })
+                        .then(response => {
+                            this.OrderAnalysis = response.data;
+                            this.tableLoading=false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
+                        })
+                    return;
                 }
             },
             //订单成本明细-和子件成本明细表格显示
