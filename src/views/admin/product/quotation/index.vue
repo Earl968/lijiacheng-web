@@ -45,14 +45,14 @@
                 <el-table :data="quotationOrder.quotationPartno" border v-loading="tableLoading"
                     element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(217, 217, 217, 0.8)" :row-class-name="tableRowClassName">
-                    <el-table-column label="半成品编码" prop="productNoHalf" width="130"> </el-table-column>
+                    <el-table-column label="半成品编码" prop="productNoHalf"> </el-table-column>
                     <el-table-column label="半成品名称" prop="productNameHalf">
                         <template slot-scope="scope">
                             <div class="ellipsis" :title="scope.row.productNameHalf">{{ scope.row.productNameHalf }}
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="子件编码" prop="materialNo" width="130"></el-table-column>
+                    <el-table-column label="子件编码" prop="materialNo"></el-table-column>
                     <el-table-column label="子件名称" prop="materialName">
                         <template slot-scope="scope">
                             <div class="ellipsis" :title="scope.row.materialName">{{ scope.row.materialName }}</div>
