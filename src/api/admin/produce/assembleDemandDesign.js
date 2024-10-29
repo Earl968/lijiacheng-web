@@ -10,6 +10,16 @@ export function getAssembleDemandDesigns(data) {
 }
 
 // 查询价格变动
+export function getPagelist(data) {
+    return request({
+        url: '/admin/produce/plan/pageList',
+        method: 'get',
+        params: data
+    })
+}
+
+
+// 查询价格变动
 export function modifyAssembleDemandDesigns(data) {
     return request({
         url: '/admin/produce/plan/update',
@@ -17,3 +27,4 @@ export function modifyAssembleDemandDesigns(data) {
         data: data
     })
 }
+

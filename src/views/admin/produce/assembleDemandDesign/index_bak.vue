@@ -4,7 +4,7 @@
             <el-col :span="24" :xs="24">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-form-item label="批号">
-                        <el-input v-model="queryParams.batchNumber" placeholder="订单号"></el-input>
+                        <el-input v-model="batnoNumber" placeholder="订单号"></el-input>
                     </el-form-item>
 
                     <el-form-item label="期望预交日">
@@ -16,7 +16,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="OnQueryAssembleDemandDesign(true)">查询</el-button>
+                        <el-button type="primary" @click="OnQueryAssembleDemandDesign">查询</el-button>
                         <el-button type="primary" @click="Onclear">清空</el-button>
                     </el-form-item>
                 </el-form>
@@ -64,12 +64,7 @@
                             </template>
                         </el-table-column>
                     </el-table>
-
-                    <pagination v-show="total>0" :limit.sync="queryParams.pageSize" :page.sync="queryParams.pageNum"
-                                :page-sizes="[15, 30, 50, 100]"
-                                :total="total" @pagination="OnQueryAssembleDemandDesign(false)"/>
                 </div>
-
                 <!-- 修改数据 -->
                 <el-dialog :visible.sync="showCoseDetail"  width="30%">
                     <el-form ref="form" :model="item" label-width="160px">
@@ -132,7 +127,7 @@
     } from "element-ui";
 
     import {
-        getPagelist,
+        getAssembleDemandDesigns,
         modifyAssembleDemandDesigns
     } from "@/api/admin/produce/assembleDemandDesign"
 
@@ -146,6 +141,8 @@
         },
         data() {
             return {
+                //批号
+                batnoNumber: '',
                 //日期选择值
                 selectDate: '',
                 //表格数据
@@ -160,17 +157,6 @@
                 pickerOptions: {},
                 //是否可以下载
                 isDownLoad:false,
-                //请求参数
-                queryParams: {
-                    batchNumber: '',
-                    startDate: '',
-                    endDate: '',
-                    pageNum: 1,
-                    pageSize: 15,
-                },
-                // 数据总条数
-                total: 0,
-                projectUrl: '',
             }
         },
         created() {
@@ -204,40 +190,48 @@
                         picker.$emit('pick', [formatDate(start), formatDate(end)]);
                     }
                 }]
-            },
-            this.projectUrl = process.env.VUE_APP_API_BASE_URL;
+            }
         },
         methods: {
             //清空输入选项
             Onclear() {
+                this.batnoNumber = '';
                 this.selectDate = '';
-                this.queryParams.startDate= '';
-                this.queryParams.endDate= '';
-                this.queryParams.batchNumber= '';
-                console.log(this.queryParams);
             },
             //选择行号之后点击查询，查询订单信息
-            OnQueryAssembleDemandDesign(isFirst) {
-                if (isFirst) {
-                    this.queryParams.pageNum = 1;
+            OnQueryAssembleDemandDesign() {
+                if (this.batnoNumber.length > 0) {
+                    this.tableLoading = true;
+                    getAssembleDemandDesigns({
+                            batchNumber: this.batnoNumber
+                        })
+                        .then(response => {
+                            this.AssembleDemandDesignList = response.data;
+                            this.isDownLoad = true;
+                            this.tableLoading = false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
+                        })
+                    return;
                 }
+
                 if (this.selectDate.length > 0) {
-                    this.queryParams.startDate= this.selectDate[0],
-                    this.queryParams.endDate= this.selectDate[1]
+                    this.tableLoading = true;
+                    getAssembleDemandDesigns({
+                            startDate: this.selectDate[0],
+                            endDate: this.selectDate[1]
+                        })
+                        .then(response => {
+                            this.AssembleDemandDesignList = response.data;
+                            this.isDownLoad = true;
+                            this.tableLoading = false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
+                        })
+                    return;
                 }
-                this.tableLoading = true;
-                console.log('AAAAAAAAA');
-                console.log(this.queryParams);
-                getPagelist(this.queryParams)
-                    .then(response => {
-                        this.total = response.data.total;
-                        this.AssembleDemandDesignList = response.data.list;
-                        this.isDownLoad = true;
-                        this.tableLoading = false;
-                    })
-                    .catch(() => {
-                        this.tableLoading = false;
-                    })
             },
             OnUpdate(row, column, event){
                 this.item=row;
@@ -247,12 +241,12 @@
                 modifyAssembleDemandDesigns(this.item)
                     .then(response => {
                         this.showCoseDetail=false;
-                        this.OnQueryAssembleDemandDesign(true);
+                        this.OnQueryAssembleDemandDesign();
                     })
             },
             onCancel(){
                 this.showCoseDetail=false;
-                this.OnQueryAssembleDemandDesign(true);
+                this.OnQueryAssembleDemandDesign();
             },
             //格式化日期
             formatDate(cellValue) {
@@ -263,44 +257,33 @@
                 const day = ('0' + date.getDate()).slice(-2);
                 return `${year}-${month}-${day}`;
             },
-            //下载数据
-            exportToExcel(){
-                if (this.selectDate.length > 0) {
-                    this.queryParams.startDate= this.selectDate[0],
-                    this.queryParams.endDate= this.selectDate[1]
-                }
-                window.location.href = this.projectUrl
-                    + '/admin/produce/plan/download?batchNumber='
-                    + this.queryParams.batchNumber+"&startDate="
-                    + this.queryParams.startDate+"&endDate="
-                    + this.queryParams.endDate
-            },
-            //下载数据
-            // exportToExcel() {
-            //     this.$nextTick(() => {
 
-            //         const table = this.$refs.table.$el.querySelector('.el-table__body-wrapper table');
-            //         if (table) {
-            //             // 创建新的table元素
-            //             var print_table_dom = document.createElement('table')
-            //             // copy一份thead
-            //             var print_table_dom_thead = this.$refs.table.$el.querySelector(
-            //                 '.el-table__header-wrapper table').cloneNode(true)
-            //             // copy一份tbody
-            //             var print_table_body = this.$refs.table.$el.querySelector(
-            //                 '.el-table__body-wrapper table').cloneNode(true)
-            //             // 将thead和tbody添加到 目标table中
-            //             print_table_dom.appendChild(print_table_dom_thead)
-            //             print_table_dom.appendChild(print_table_body)
-            //             // 生成 book
-            //             const new_sheet = XLSX.utils.table_to_book(print_table_dom)
-            //             // 导出excel
-            //             XLSX.writeFile(new_sheet, '数据导出.xlsx')
-            //         } else {
-            //             console.error('表格没有数据！');
-            //         }
-            //     });
-            // }
+            //下载数据
+            exportToExcel() {
+                this.$nextTick(() => {
+
+                    const table = this.$refs.table.$el.querySelector('.el-table__body-wrapper table');
+                    if (table) {
+                        // 创建新的table元素
+                        var print_table_dom = document.createElement('table')
+                        // copy一份thead
+                        var print_table_dom_thead = this.$refs.table.$el.querySelector(
+                            '.el-table__header-wrapper table').cloneNode(true)
+                        // copy一份tbody
+                        var print_table_body = this.$refs.table.$el.querySelector(
+                            '.el-table__body-wrapper table').cloneNode(true)
+                        // 将thead和tbody添加到 目标table中
+                        print_table_dom.appendChild(print_table_dom_thead)
+                        print_table_dom.appendChild(print_table_body)
+                        // 生成 book
+                        const new_sheet = XLSX.utils.table_to_book(print_table_dom)
+                        // 导出excel
+                        XLSX.writeFile(new_sheet, '数据导出.xlsx')
+                    } else {
+                        console.error('表格没有数据！');
+                    }
+                });
+            }
         }
     }
 </script>
