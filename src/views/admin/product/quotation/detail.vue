@@ -34,11 +34,11 @@
 
                     <el-table-column label="单位" prop="unit"></el-table-column>
 
-                    <el-table-column label="标准用量" prop="standardUsage"></el-table-column>
+                    <el-table-column label="标准用量" prop="standardUsage" width="130"></el-table-column>
 
                     <el-table-column label="损耗率" prop="lossRate"></el-table-column>
 
-                    <el-table-column label="实际用量" prop="actualUsage"></el-table-column>
+                    <el-table-column label="实际用量" prop="actualUsage" width="130"></el-table-column>
 
                     <el-table-column label="位号" prop="positionNumber">
                         <template slot-scope="scope">
@@ -46,7 +46,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="单价" prop="unitPrice">
+                    <el-table-column label="单价" prop="unitPrice" width="130">
                         <div class="item" slot-scope="scope">
                             <el-input class="item__input" type="textarea" v-model="scope.row.unitPrice"
                                 placeholder="请输入内容"
@@ -57,7 +57,7 @@
                     </el-table-column>
 
 
-                    <el-table-column label="金额" prop="amount"></el-table-column>
+                    <el-table-column label="金额" prop="amount" width="130"></el-table-column>
 
 
 
@@ -67,7 +67,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="最高价" prop="highestPrice"></el-table-column>
+                    <el-table-column label="最高价" prop="highestPrice" width="150"></el-table-column>
 
                     <el-table-column label="最高价供应商" prop="highestPriceSupplier">
                         <template slot-scope="scope">
@@ -250,7 +250,7 @@
     .item{
         .item__input{
           display: none;
-          width: 50px;
+          width: 130px;
           /* 调整elementUI中样式 如果不需要调整请忽略 */
           .el-input__inner{
             height: 24px!important;
@@ -267,7 +267,7 @@
         .item__txt{
           box-sizing: border-box;
           border: 1px solid transparent;
-          width: 50px;
+          width: 130px;
           line-height: 24px;
           padding: 0 8px;
         }

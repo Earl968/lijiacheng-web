@@ -49,7 +49,11 @@
                                 <div class="item__nowrap" :title="scope.row.productSpecification">{{ scope.row.productSpecification }}</div>
                             </template>
                         </el-table-column>
-                        <el-table-column label="单据类别名称" prop="documentCategoryName"></el-table-column>
+                        <el-table-column label="单据类别名称" prop="documentCategoryName">
+                            <template slot-scope="scope">
+                                {{ scope.row.orderedQuantity - scope.row.storedQuantity }}
+                            </template>
+                        </el-table-column>
                         <el-table-column label="受订数量" prop="orderedQuantity"></el-table-column>
                         <el-table-column label="已缴库数量" prop="storedQuantity"></el-table-column>
                         <el-table-column label="未缴库数量" prop="unstoredQuantity">
@@ -171,6 +175,7 @@
                 // 数据总条数
                 total: 0,
                 projectUrl: '',
+                editProp: [ 'planStartDate','pullLine','releaseStatus'],
             }
         },
         created() {
@@ -214,7 +219,6 @@
                 this.queryParams.startDate= '';
                 this.queryParams.endDate= '';
                 this.queryParams.batchNumber= '';
-                console.log(this.queryParams);
             },
             //选择行号之后点击查询，查询订单信息
             OnQueryAssembleDemandDesign(isFirst) {
@@ -226,8 +230,7 @@
                     this.queryParams.endDate= this.selectDate[1]
                 }
                 this.tableLoading = true;
-                console.log('AAAAAAAAA');
-                console.log(this.queryParams);
+
                 getPagelist(this.queryParams)
                     .then(response => {
                         this.total = response.data.total;
@@ -240,8 +243,11 @@
                     })
             },
             OnUpdate(row, column, event){
-                this.item=row;
-                this.showCoseDetail=true;
+                const property = column.property
+                if (this.editProp.includes(property) && row.batchNumber.length>0){
+                    this.item=row;
+                    this.showCoseDetail=true;
+                }
             },
             onSubmit(){
                 modifyAssembleDemandDesigns(this.item)
