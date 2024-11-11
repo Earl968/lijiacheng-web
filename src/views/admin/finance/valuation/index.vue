@@ -4,8 +4,18 @@
             <el-col :span="14" :xs="14">
 
                 <el-form :inline="true" class="demo-form-inline">
+
+
+                    <el-form-item label="客户型号">
+                        <el-input v-model="cust" placeholder="物料编码" @keyup.enter.native="custEnter"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="物料编码">
-                        <el-input v-model="prdNo" placeholder="物料编码"></el-input>
+                        <el-select v-model="prdNo" filterable placeholder="请选择" clearable @blur="selectBlur" @clear="selectClear">
+                            <el-option v-for="item in prdNos" :key="item" :label="item" :value="item">
+                            </el-option>
+                        </el-select>
+                        <!-- <el-input v-model="prdNo" placeholder="物料编码"></el-input> -->
                     </el-form-item>
 
                     <el-form-item>
@@ -18,7 +28,7 @@
             <el-col :span="10" :xs="10">
 
                 <el-form :inline="true" class="demo-form-inline">
-                    <el-form-item label="设置泰币计算标量">
+                    <el-form-item label="设置计算标量">
                         <el-input v-model="scalar" placeholder="计算标量"></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -58,11 +68,11 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="单价" prop="unitPrice" width="100"></el-table-column>
-                    <el-table-column label="金额" prop="amount" width="100"></el-table-column>
-                    <el-table-column label="美金" prop="dollar" width="100"></el-table-column>
-                    <el-table-column label="泰国单价" prop="thaiPrice" width="100"></el-table-column>
-                    <el-table-column label="泰国金额" prop="thaiAmount" width="100"></el-table-column>
+                    <el-table-column label="单价¥" prop="unitPrice" width="100"></el-table-column>
+                    <el-table-column label="金额¥" prop="amount" width="100"></el-table-column>
+                    <el-table-column label="汇率换算(¥→$)" prop="dollar" width="100"></el-table-column>
+                    <el-table-column label="泰国单价$" prop="thaiPrice" width="100"></el-table-column>
+                    <el-table-column label="泰国金额$" prop="thaiAmount" width="100"></el-table-column>
                     <el-table-column label="供应商" prop="supplier">
                         <template slot-scope="scope">
                             <div class="item__nowrap" :title="scope.row.supplier">{{ scope.row.supplier }}</div>
@@ -159,6 +169,7 @@
         getEcn,
         getMoney,
         getThaiHis,
+        getCustType,
         modifyOne,
         modifyList,
     } from "@/api/admin/finance/valuation"
@@ -168,8 +179,12 @@
             return {
                 //物料编码
                 prdNo: '',
+                //客户类型的物料
+                prdNos : [],
                 //设置计算标量
                 scalar: '',
+                //客户型号
+                cust: '',
                 //材料泰国单价
                 thai: {},
                 //订单成本明细-和子件成本明细表格显示
@@ -191,23 +206,37 @@
             }
         },
         methods: {
+            selectBlur(e){
+                this.prdNo =e.target.value;
+                this.$forceUpdate();
+            },
+            selectClear(e){
+                this.prdNo ="";
+                this.$forceUpdate();
+            },
+            custEnter(){
+                if(this.cust.length > 0){
+                    getCustType( {subProNo: this.cust} ).then(response => {
+                        this.prdNos = response.data;
+                        this.prdNo=this.prdNos[0];
+                    })
+                }
+            },
             //查询表格数据
             OnQuery() {
-                if (this.prdNo.length == 0) {
+                if (this.prdNo.length > 0) {
+                    this.tableLoading = true;
+                    getFinanceValuation({prdId : this.prdNo})
+                        .then(response => {
+                            this.financeValuation = response.data;
+                            this.tableLoading = false;
+                        })
+                        .catch(() => {
+                            this.tableLoading = false;
+                        });
                     return;
                 }
 
-                this.tableLoading = true;
-                getFinanceValuation({
-                        prdId: this.prdNo
-                    })
-                    .then(response => {
-                        this.financeValuation = response.data;
-                        this.tableLoading = false;
-                    })
-                    .catch(() => {
-                        this.tableLoading = false;
-                    });
             },
             rowClick(row, column, event) {
                 //点击了半成品合计，打开ECN变更查询界面
@@ -276,6 +305,7 @@
             },
             Onclear() {
                 this.prdNo = '';
+                this.cust = '';
             }
         }
     }

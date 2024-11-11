@@ -8,6 +8,15 @@ export function getFinanceValuation(data) {
     })
 }
 
+export function getCustType(data) {
+    return request({
+        url: '/admin/financeValuation/selectCustType',
+        method: 'get',
+        params: data
+    })
+}
+
+
 export function getEcn(data) {
     return request({
         url: '/admin/financeValuation/selectEcn',

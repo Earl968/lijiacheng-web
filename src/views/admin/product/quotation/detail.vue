@@ -129,6 +129,13 @@
                     });
             },
             cellStyle({ row, column, rowIndex, columnIndex }) {
+                if (row.dataType==1 && row.unitPrice==0 && column.property=="unitPrice"){
+                    return {
+                        height:'30px  !important',
+                        background: '#ff0000',
+                        padding: '0px 0px'
+                    };
+                }
                 if (this.isyellow(row.dataType)) {
                     return {
                         height:'30px  !important',
@@ -136,11 +143,6 @@
                         padding: '0px 0px'
                     };
                 }
-              // 例如，设置日期列的单元格背景颜色
-                return {
-                    height:'30px  !important',
-                    padding: '0px 0px',
-                };
             },
             //判断数据是否能进行更改
             isyellow(str){
