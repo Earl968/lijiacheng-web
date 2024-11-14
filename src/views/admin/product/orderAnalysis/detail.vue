@@ -26,15 +26,6 @@
 
                     <el-table-column label="标准用量" prop="standardUsage"></el-table-column>
 
-                    <el-table-column label="损耗率" prop="lossRate"></el-table-column>
-
-                    <el-table-column label="实际用量" prop="actualUsage"></el-table-column>
-
-                    <el-table-column label="位号" prop="positionNumber">
-                        <template slot-scope="scope">
-                            <div class="item__nowrap" :title="scope.row.positionNumber">{{ scope.row.positionNumber }}</div>
-                        </template>
-                    </el-table-column>
 
                     <el-table-column label="单价" prop="unitPrice">
                         <template slot-scope="scope">
@@ -61,7 +52,6 @@
                         </template>
                     </el-table-column>
 
-                     <el-table-column label="部门名称" prop="deptName"></el-table-column>
                 </el-table>
             </el-col>
         </el-row>
