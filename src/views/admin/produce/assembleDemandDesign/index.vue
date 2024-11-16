@@ -49,11 +49,7 @@
                                 <div class="item__nowrap" :title="scope.row.productSpecification">{{ scope.row.productSpecification }}</div>
                             </template>
                         </el-table-column>
-                        <el-table-column label="单据类别名称" prop="documentCategoryName">
-                            <template slot-scope="scope">
-                                {{ scope.row.orderedQuantity - scope.row.storedQuantity }}
-                            </template>
-                        </el-table-column>
+                        <el-table-column label="单据类别名称" prop="documentCategoryName"></el-table-column>
                         <el-table-column label="受订数量" prop="orderedQuantity"></el-table-column>
                         <el-table-column label="已缴库数量" prop="storedQuantity"></el-table-column>
                         <el-table-column label="未缴库数量" prop="unstoredQuantity">
