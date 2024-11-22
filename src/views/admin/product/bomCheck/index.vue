@@ -10,16 +10,14 @@
 
                 <div class="el-col el-col-3 el-col-xs-3 grid-content bg-purple-dark"
                     style="padding-left: 6px; padding-right: 6px; background:#F56C6C">
-                    <div class="demo-color-box" >整行红色代表ERP中没有</div>
-                    <div class="demo-color-box" >单个单元格红色代表此栏位比对错误</div>
+                    <div class="demo-color-box">整行红色代表ERP中没有</div>
+                    <div class="demo-color-box">单个单元格红色代表此栏位比对错误</div>
                 </div>
 
                 <div class="el-col el-col-3 el-col-xs-3 grid-content bg-purple-dark"
                     style="padding-left: 6px; padding-right: 6px;  background:#E6A23C; margin-top: 10px;">
                     <div class="demo-color-box">ERP中存在此数据但表格中没有</div>
                 </div>
-
-
 
                 <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle">
                     <el-table-column label="上层节点号" prop="key"></el-table-column>
@@ -44,12 +42,16 @@
                 tableData: [],
                 projectUrl: '',
                 uploadUrl: '',
-                editProp: []
             };
+        },
+        computed: {
+            editProp() {
+                return this.tableData.flatMap(row => row.discrepancyProperty);
+            }
         },
         created() {
             this.projectUrl = process.env.VUE_APP_API_BASE_URL;
-            this.uploadUrl = this.projectUrl + '/admin/product/bomCheck/upload'
+            this.uploadUrl = this.projectUrl + '/admin/product/bomCheck/upload?file='
         },
         methods: {
             handleSuccess(response, file, fileList) {
@@ -66,10 +68,11 @@
                         background: '#F56C6C'
                     };
                 }
-                this.editProp = row.discrepancyProperty;
 
-                const property = column.property
-                if (!row.taskResult && this.editProp.includes(property)) {
+                const discrepancyProperties = row.discrepancyProperty || [];
+                const property = column.property;
+
+                if (!row.taskResult && discrepancyProperties.includes(property)) {
                     return {
                         background: '#F56C6C'
                     };
@@ -86,24 +89,27 @@
 </script>
 
 <style>
-      .el-row {
+    .el-row {
         margin-bottom: 20px;
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-      .el-col {
-        border-radius: 4px;
-      }
 
-      .grid-content {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .grid-content {
         border-radius: 4px;
         min-height: 36px;
         padding: 0.625rem;
         color: aliceblue;
-      }
-      .row-bg {
+    }
+
+    .row-bg {
         padding: 10px 0;
         background-color: #f9fafc;
-      }
+    }
 </style>
