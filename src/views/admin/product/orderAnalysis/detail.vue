@@ -8,7 +8,7 @@
 
                     <el-table-column label="半成品编码" prop="semiFinishedProductCode" width="120"></el-table-column>
 
-                    <el-table-column label="半成品名称" prop="semiFinishedProductName"  width="150">
+                    <el-table-column label="半成品名称" prop="semiFinishedProductName"  width="500">
                         <template slot-scope="scope">
                             <div class="item__nowrap" :title="scope.row.semiFinishedProductName">{{ scope.row.semiFinishedProductName }}</div>
                         </template>
@@ -16,7 +16,7 @@
 
                     <el-table-column label="子件编码" prop="subcomponentCode" width="120"></el-table-column>
 
-                    <el-table-column label="子件名称" prop="subcomponentName" width="150">
+                    <el-table-column label="子件名称" prop="subcomponentName" width="500">
                         <template slot-scope="scope">
                             <div class="item__nowrap" :title="scope.row.subcomponentName">{{ scope.row.subcomponentName }}</div>
                         </template>
