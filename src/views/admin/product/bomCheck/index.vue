@@ -19,13 +19,13 @@
                     <div class="demo-color-box">ERP中存在此数据但表格中没有</div>
                 </div>
 
-                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle">
-                    <el-table-column label="上层节点号" prop="key"></el-table-column>
-                    <el-table-column label="母件规格" prop="upSpc"></el-table-column>
-                    <el-table-column label="材料代号" prop="downPrdNo"></el-table-column>
-                    <el-table-column label="材料规格" prop="downSpc"></el-table-column>
+                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle" >
+                    <el-table-column label="上层节点号" prop="key"  width="130"></el-table-column>
+                    <el-table-column label="母件规格" prop="upSpc" width="500"></el-table-column>
+                    <el-table-column label="材料代号" prop="downPrdNo"  width="130"></el-table-column>
+                    <el-table-column label="材料规格" prop="downSpc" width="500"></el-table-column>
                     <el-table-column label="材料单位" prop="unit"></el-table-column>
-                    <el-table-column label="组装位置" prop="useinNo"></el-table-column>
+                    <el-table-column label="组装位置" prop="useriNo"></el-table-column>
                     <el-table-column label="BOM用量" prop="qty"></el-table-column>
                     <el-table-column label="基数" prop="qtyBas"></el-table-column>
                     <el-table-column label="替代品" prop="prdNoChg"></el-table-column>
