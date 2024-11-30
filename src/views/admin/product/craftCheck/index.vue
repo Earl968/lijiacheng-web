@@ -8,7 +8,7 @@
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
 
-                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle"  height="700">
+                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle" :row-style="rowStyle"  height="600">
                     <el-table-column label="上层节点号" prop="upNode"  width="130"></el-table-column>
                     <el-table-column label="母件规格" prop="upSpc" width="500"></el-table-column>
                     <el-table-column label="材料代号" prop="downNode"  width="130"></el-table-column>
@@ -46,6 +46,12 @@
             },
             isEmpty(str) {
               return (!str || str.trim().length === 0);
+            },
+            rowStyle({row, rowIndex}){
+                console.log(row);
+                if(row.isExists){
+                    return { background: '#F56C6C' };
+                }
             },
             cellStyle({
                 row,
