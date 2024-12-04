@@ -218,6 +218,7 @@
             },
             //选择行号之后点击查询，查询订单信息
             OnQueryAssembleDemandDesign(isFirst) {
+                this.isDownLoad = false;
                 if (isFirst) {
                     this.queryParams.pageNum = 1;
                 }
@@ -231,7 +232,9 @@
                     .then(response => {
                         this.total = response.data.total;
                         this.AssembleDemandDesignList = response.data.list;
-                        this.isDownLoad = true;
+                        if(response.data.list.length>0){
+                            this.isDownLoad = true;
+                        }
                         this.tableLoading = false;
                     })
                     .catch(() => {
@@ -277,32 +280,6 @@
                     + this.queryParams.startDate+"&endDate="
                     + this.queryParams.endDate
             },
-            //下载数据
-            // exportToExcel() {
-            //     this.$nextTick(() => {
-
-            //         const table = this.$refs.table.$el.querySelector('.el-table__body-wrapper table');
-            //         if (table) {
-            //             // 创建新的table元素
-            //             var print_table_dom = document.createElement('table')
-            //             // copy一份thead
-            //             var print_table_dom_thead = this.$refs.table.$el.querySelector(
-            //                 '.el-table__header-wrapper table').cloneNode(true)
-            //             // copy一份tbody
-            //             var print_table_body = this.$refs.table.$el.querySelector(
-            //                 '.el-table__body-wrapper table').cloneNode(true)
-            //             // 将thead和tbody添加到 目标table中
-            //             print_table_dom.appendChild(print_table_dom_thead)
-            //             print_table_dom.appendChild(print_table_body)
-            //             // 生成 book
-            //             const new_sheet = XLSX.utils.table_to_book(print_table_dom)
-            //             // 导出excel
-            //             XLSX.writeFile(new_sheet, '数据导出.xlsx')
-            //         } else {
-            //             console.error('表格没有数据！');
-            //         }
-            //     });
-            // }
         }
     }
 </script>
