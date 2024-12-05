@@ -54,11 +54,6 @@
                     <el-table-column key="name" align="center" label="品名" prop="name"/>
                     <el-table-column key="qty_low" align="center" class-name="qty_low" label="最小包装量(双击修改)"
                                      prop="qty_low"/>
-                    <!--                    <el-table-column label="最小包装量" class-name="qty_low">
-                                            <template slot-scope="scope">
-                                                {{scope.row.qty_low}}
-                                            </template>
-                                        </el-table-column>-->
                     <el-table-column key="gg" align="center" label="规格" prop="gg"/>
                 </el-table>
 
