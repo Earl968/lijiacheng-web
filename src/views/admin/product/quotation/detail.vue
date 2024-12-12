@@ -7,7 +7,7 @@
         </el-row>
         <el-row :gutter="24" style="margin-top: 10px;">
             <el-col :span="24" :xs="24">
-                <el-table :data="SubcomponentCost" border height="800"
+                <el-table :data="SubcomponentCost" border height="700"
                     element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading" v-loading="tableLoading"
                     element-loading-background="rgba(217, 217, 217, 0.8)" @cell-mouse-enter="handleCellEnter"
                     @cell-mouse-leave="handleCellLeave" @cell-dblclick="handleCellClick" :cell-style="cellStyle">
@@ -143,6 +143,9 @@
                         padding: '0px 0px'
                     };
                 }
+                return {
+                    height:'30px',
+                    padding: '0px 0px' };
             },
             //判断数据是否能进行更改
             isyellow(str){

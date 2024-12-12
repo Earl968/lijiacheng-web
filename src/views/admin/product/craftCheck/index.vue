@@ -14,21 +14,33 @@
                     </el-col>
                 </el-row>
 
-                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle" :row-style="rowStyle"
-                    :height="tableHeight">
-                    <el-table-column label="上层节点号" prop="upNode" width="100"></el-table-column>
-                    <el-table-column label="母件规格" prop="upSpc"></el-table-column>
-                    <el-table-column label="材料代号" prop="downNode" width="100"></el-table-column>
-                    <el-table-column label="材料规格" prop="downSpc"></el-table-column>
-                    <el-table-column label="材料单位" prop="unit" width="60"></el-table-column>
-                    <el-table-column label="组装位置" prop="location" width="100"></el-table-column>
-                    <el-table-column label="BOM用量" prop="qty" width="60"></el-table-column>
-                    <el-table-column label="基数" prop="qtyBas" width="50"></el-table-column>
-                    <el-table-column label="替代品" prop="replace" width="150"></el-table-column>
-                    <el-table-column label="停用日期" prop="stopDate" width="100"></el-table-column>
-                    <el-table-column label="ERP规格" prop="erpSpc"></el-table-column>
-                    <el-table-column label="单价" prop="price" width="80"></el-table-column>
-                </el-table>
+
+                 <el-tabs type="border-card" v-model="activeTabName">
+                    <el-tab-pane
+                      v-for="tab in tabsData"
+                      :key="tab.label"
+                      :label="tab.label"
+                      :name="tab.label"
+                      >
+                      <el-table :data="tab.content" border style="width: 100%" :cell-style="cellStyle" :row-style="rowStyle"  :height="tableHeight">
+                          <el-table-column label="上层节点号" prop="upNode" width="100"></el-table-column>
+                          <el-table-column label="母件规格" prop="upSpc"></el-table-column>
+                          <el-table-column label="材料代号" prop="downNode" width="100"></el-table-column>
+                          <el-table-column label="材料规格" prop="downSpc"></el-table-column>
+                          <el-table-column label="材料单位" prop="unit" width="60"></el-table-column>
+                          <el-table-column label="组装位置" prop="location" width="100"></el-table-column>
+                          <el-table-column label="BOM用量" prop="qty" width="60"></el-table-column>
+                          <el-table-column label="基数" prop="qtyBas" width="50"></el-table-column>
+                          <el-table-column label="替代品" prop="replace" width="150"></el-table-column>
+                          <el-table-column label="停用日期" prop="stopDate" width="100"></el-table-column>
+                          <el-table-column label="ERP规格" prop="erpSpc"></el-table-column>
+                          <el-table-column label="单价" prop="price" width="80"></el-table-column>
+                      </el-table>
+                    </el-tab-pane>
+                  </el-tabs>
+
+
+
             </el-col>
         </el-row>
     </div>
@@ -38,11 +50,12 @@
     export default {
         data() {
             return {
-                screenHeight: window.innerHeight - 130,
+                screenHeight: window.innerHeight - 220,
                 uploadShow: true,
                 uploadsButtonText: '隐藏上传选择框',
                 tableHeight: 600,
-                tableData: [],
+                tabsData: [],
+                activeTabName: '',
                 projectUrl: '',
                 uploadUrl: '',
             };
@@ -65,13 +78,21 @@
         },
         methods: {
             handleSuccess(response, file, fileList) {
-                this.tableData = response.data;
+                const tabsData = [];
+                for (const key in response.data) {
+                    if (response.data.hasOwnProperty(key)) {
+                      tabsData.push({ label: key, content: response.data[key] });
+                    }
+                }
+                this.tabsData = tabsData;
+                if (this.tabsData.length > 0) {
+                    this.activeTabName = this.tabsData[0].label;
+                }
             },
             isEmpty(str) {
                 return (!str || str.trim().length === 0);
             },
             showUpload() {
-                //const parentMain = this.$parent.$el.offsetHeight;//.querySelector('.app-main');
                 if (this.uploadShow) {
                     this.uploadShow = false;
                     this.uploadsButtonText = "隐藏上传选择框"
