@@ -375,10 +375,14 @@ export default {
                 }
                 if (detail.batchNo === undefined || detail.batchNo === '' ||
                     detail.productName === undefined || detail.productName === ''
-                    || detail.productNum === undefined || detail.productNum === 0
+                    || detail.productNum === undefined
                     || detail.priceInTax === undefined
                     || detail.priceEnTax === undefined) {
                     Message.error("第" + (i + 1) + "条数据的基本信息未完善");
+                    return;
+                }
+                if(detail.productNum === 0){
+                    Message.error("第" + (i + 1) + "条商品数量未填写");
                     return;
                 }
             }
