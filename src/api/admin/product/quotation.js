@@ -67,4 +67,11 @@ export function modifySubcomponentCost(data) {
     })
 }
 
-
+//删除以保存的本地数据
+export function removeOrderCostOverview(data) {
+    return request({
+        url: '/admin/erp/quotation/removeOrderCostOverview',
+        method: 'get',
+        params: data
+    })
+}

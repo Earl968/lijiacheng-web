@@ -19,7 +19,7 @@
                     <div class="demo-color-box">ERP中存在此数据但表格中没有</div>
                 </div>
 
-                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle" >
+                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle"   height="600" >
                     <el-table-column label="上层节点号" prop="key"  width="130"></el-table-column>
                     <el-table-column label="母件规格" prop="upSpc" width="500"></el-table-column>
                     <el-table-column label="材料代号" prop="downPrdNo"  width="130"></el-table-column>

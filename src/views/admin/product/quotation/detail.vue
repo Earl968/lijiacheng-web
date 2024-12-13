@@ -7,26 +7,26 @@
         </el-row>
         <el-row :gutter="24" style="margin-top: 10px;">
             <el-col :span="24" :xs="24">
-                <el-table :data="SubcomponentCost" border height="800"
+                <el-table :data="SubcomponentCost" border height="700"
                     element-loading-text="正在查询数据" element-loading-spinner="el-icon-loading" v-loading="tableLoading"
                     element-loading-background="rgba(217, 217, 217, 0.8)" @cell-mouse-enter="handleCellEnter"
                     @cell-mouse-leave="handleCellLeave" @cell-dblclick="handleCellClick" :cell-style="cellStyle">
 
                     <el-table-column v-if="false" label="dataType" prop="dataType"></el-table-column>
 
-                    <el-table-column label="订单批号" prop="orderBatchNumber" width="110"></el-table-column>
+                    <el-table-column label="订单批号" prop="orderBatchNumber" width="130" ></el-table-column>
 
-                    <el-table-column label="半成品编码" prop="semiFinishedProductCode" width="120"></el-table-column>
+                    <el-table-column label="半成品编码" prop="semiFinishedProductCode" width="130"></el-table-column>
 
-                    <el-table-column label="半成品名称" prop="semiFinishedProductName"  width="150">
+                    <el-table-column label="半成品名称" prop="semiFinishedProductName" width="150">
                         <template slot-scope="scope">
                             <div class="item__nowrap" :title="scope.row.semiFinishedProductName">{{ scope.row.semiFinishedProductName }}</div>
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="子件编码" prop="subcomponentCode" width="120"></el-table-column>
+                    <el-table-column label="子件编码" prop="subcomponentCode" width="130"></el-table-column>
 
-                    <el-table-column label="子件名称" prop="subcomponentName" width="150">
+                    <el-table-column label="子件名称" prop="subcomponentName" >
                         <template slot-scope="scope">
                             <div class="item__nowrap" :title="scope.row.subcomponentName">{{ scope.row.subcomponentName }}</div>
                         </template>
@@ -34,11 +34,11 @@
 
                     <el-table-column label="单位" prop="unit"></el-table-column>
 
-                    <el-table-column label="标准用量" prop="standardUsage" width="130"></el-table-column>
+                    <el-table-column label="标准用量" prop="standardUsage" ></el-table-column>
 
                     <el-table-column label="损耗率" prop="lossRate"></el-table-column>
 
-                    <el-table-column label="实际用量" prop="actualUsage" width="130"></el-table-column>
+                    <el-table-column label="实际用量" prop="actualUsage"></el-table-column>
 
                     <el-table-column label="位号" prop="positionNumber">
                         <template slot-scope="scope">
@@ -46,7 +46,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="单价" prop="unitPrice" width="130">
+                    <el-table-column label="单价" prop="unitPrice">
                         <div class="item" slot-scope="scope">
                             <el-input class="item__input" type="textarea" v-model="scope.row.unitPrice"
                                 placeholder="请输入内容"
@@ -57,7 +57,7 @@
                     </el-table-column>
 
 
-                    <el-table-column label="金额" prop="amount" width="130"></el-table-column>
+                    <el-table-column label="金额" prop="amount"></el-table-column>
 
 
 
@@ -67,7 +67,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="最高价" prop="highestPrice" width="150"></el-table-column>
+                    <el-table-column label="最高价" prop="highestPrice"></el-table-column>
 
                     <el-table-column label="最高价供应商" prop="highestPriceSupplier">
                         <template slot-scope="scope">
@@ -143,6 +143,9 @@
                         padding: '0px 0px'
                     };
                 }
+                return {
+                    height:'30px',
+                    padding: '0px 0px' };
             },
             //判断数据是否能进行更改
             isyellow(str){

@@ -40,7 +40,7 @@
                         @cell-click="handleCellClick">
 
                         <el-table-column label="订单批号" prop="orderBatchNumber" width="120"> </el-table-column>
-                        <el-table-column label="物料编码" prop="materialCode" width="130"> </el-table-column>
+                        <el-table-column label="物料编码" prop="materialCode" width="120"> </el-table-column>
                         <el-table-column label="物料规格" prop="materialSpecification">
                             <template slot-scope="scope">
                                 <div class="item__nowrap" :title="scope.row.materialSpecification">
@@ -78,6 +78,12 @@
                                     @keyup.enter.native.prevent="handleEnter(scope.row)"></el-input>
                                 <div class="item__txt item__nowrap" :title="scope.row.remarks">{{ scope.row.remarks }}</div>
                             </div>
+                        </el-table-column>
+
+                        <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  >
+                           <template slot-scope="scope" v-if="scope.row.orderBatchNumber !== ''">
+                               <el-button size="mini" type="text" icon="el-icon-delete"  @click="removeOrder(scope.row)" >删除 </el-button>
+                           </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -161,7 +167,8 @@
         getSubcomponentCost,
         getOverviewList,
         modifyOverviewEdate,
-        modifyOverviewRemarks
+        modifyOverviewRemarks,
+        removeOrderCostOverview
     } from "@/api/admin/product/quotation"
 
     import detail from './detail.vue'
@@ -393,8 +400,7 @@
             },
             /** 保存进入编辑的cell */
             saveCellClick (row, cell) {
-              const id = row.orderBatchNumber
-              console.log(this.clickCellMap[id])
+              const id = row.orderBatchNumber;
               if (this.clickCellMap[id] !== undefined) {
                 if (!this.clickCellMap[id].includes(cell)) {
                   this.clickCellMap[id].push(cell)
@@ -406,6 +412,15 @@
 
             /** 保存数据 */
             save (row) {
+              if(row.remarks==undefined ||row.remarks==null ){
+                  const id = row.orderBatchNumber
+                  // 取消本行所有cell的编辑状态
+                  this.clickCellMap[id].forEach(cell => {
+                    this.cancelEditable(cell)
+                  })
+                  this.clickCellMap[id] = []
+                  return;
+              }
               row.remarks = row.remarks.replace(/[\r\n]+/g, '');
               //修改数据
               modifyOverviewRemarks({
@@ -452,6 +467,19 @@
                        console.error('表格没有数据！');
                    }
                 });
+            },
+            //删除以保存的本地数据
+            removeOrder(row){
+                 this.$confirm('确认删除?', '提示', { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' })
+                 .then(() => {
+                      removeOrderCostOverview({orderNumber:row.orderBatchNumber}).then(response => {
+                            if(response.code==200){
+                                this.$message({ type: 'success', message: '删除成功!' });
+                            }
+                      });
+                 }).catch(() => { this.$message({ type: 'info', message: '已取消删除' }); });
+
+
             }
         }
     }
