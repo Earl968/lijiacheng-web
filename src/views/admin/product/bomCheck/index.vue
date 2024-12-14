@@ -18,18 +18,27 @@
                     style="padding-left: 6px; padding-right: 6px;  background:#E6A23C; margin-top: 10px;">
                     <div class="demo-color-box">ERP中存在此数据但表格中没有</div>
                 </div>
+            </el-col>
+        </el-row>
 
-                <el-table :data="tableData" border style="width: 100%" :cell-style="cellStyle"   height="600" >
-                    <el-table-column label="上层节点号" prop="key"  width="130"></el-table-column>
-                    <el-table-column label="母件规格" prop="upSpc" width="500"></el-table-column>
-                    <el-table-column label="材料代号" prop="downPrdNo"  width="130"></el-table-column>
-                    <el-table-column label="材料规格" prop="downSpc" width="500"></el-table-column>
-                    <el-table-column label="材料单位" prop="unit"></el-table-column>
-                    <el-table-column label="组装位置" prop="useriNo"></el-table-column>
-                    <el-table-column label="BOM用量" prop="qty"></el-table-column>
-                    <el-table-column label="基数" prop="qtyBas"></el-table-column>
-                    <el-table-column label="替代品" prop="prdNoChg"></el-table-column>
-                </el-table>
+        <el-row :gutter="24">
+            <el-col :span="24" :xs="24">
+                <el-tabs type="border-card" v-model="activeTabName">
+                   <el-tab-pane v-for="tab in tabsData" :key="tab.label"
+                     :label="tab.label" :name="tab.label" >
+                        <el-table :data="tab.content" border style="width: 100%" :cell-style="cellStyle"   height="600" >
+                            <el-table-column label="上层节点号" prop="key"  width="130"></el-table-column>
+                            <el-table-column label="母件规格" prop="upSpc" width="500"></el-table-column>
+                            <el-table-column label="材料代号" prop="downPrdNo"  width="130"></el-table-column>
+                            <el-table-column label="材料规格" prop="downSpc" width="500"></el-table-column>
+                            <el-table-column label="材料单位" prop="unit"></el-table-column>
+                            <el-table-column label="组装位置" prop="useriNo"></el-table-column>
+                            <el-table-column label="BOM用量" prop="qty"></el-table-column>
+                            <el-table-column label="基数" prop="qtyBas"></el-table-column>
+                            <el-table-column label="替代品" prop="prdNoChg"></el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                </el-tabs>
             </el-col>
         </el-row>
     </div>
@@ -39,23 +48,33 @@
     export default {
         data() {
             return {
-                tableData: [],
+                tabsData: [],
                 projectUrl: '',
                 uploadUrl: '',
+                activeTabName: '',
             };
         },
         computed: {
             editProp() {
-                return this.tableData.flatMap(row => row.discrepancyProperty);
+                return this.tabsData.flatMap(row => row.discrepancyProperty);
             }
         },
         created() {
             this.projectUrl = process.env.VUE_APP_API_BASE_URL;
-            this.uploadUrl = this.projectUrl + '/admin/product/bomCheck/upload?file='
+            this.uploadUrl = this.projectUrl + '/admin/product/bomCheck/upload'
         },
         methods: {
             handleSuccess(response, file, fileList) {
-                this.tableData = response.data;
+                const tabsData = [];
+                for (const key in response.data) {
+                    if (response.data.hasOwnProperty(key)) {
+                      tabsData.push({ label: key, content: response.data[key] });
+                    }
+                }
+                this.tabsData = tabsData;
+                if (this.tabsData.length > 0) {
+                    this.activeTabName = this.tabsData[0].label;
+                }
             },
             cellStyle({
                 row,
@@ -88,7 +107,7 @@
     };
 </script>
 
-<style>
+<style scoped>
     .el-row {
         margin-bottom: 20px;
 
@@ -110,6 +129,9 @@
 
     .row-bg {
         padding: 10px 0;
-        background-color: #f9fafc;
+    }
+
+    .el-table__row:hover {
+      background-color: inherit !important; /* 覆盖默认的悬停样式 */
     }
 </style>
