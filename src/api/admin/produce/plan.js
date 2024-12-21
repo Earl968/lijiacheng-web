@@ -1,9 +1,18 @@
 import request from '@/utils/request'
 
-// 订单列表
 export function listPlans(data) {
     return request({
-        url: '/admin/erp/production/selectPlans',
+        url: '/admin/erp/production/selectSmtPlans',
+        method: 'post',
+        data: data
+    })
+}
+
+
+// 订单列表
+export function pluginsPlans(data) {
+    return request({
+        url: '/admin/erp/production/selectPluginsPlans',
         method: 'post',
         data: data
     })
