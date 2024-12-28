@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询客户级别
+// 数据汇总
 export function summary(query) {
     return request({
         url: '/admin/slm/summary',
@@ -8,6 +8,26 @@ export function summary(query) {
         params: query
     })
 }
+
+// 查询仓库库存
+export function list(query) {
+    return request({
+        url: '/admin/slm/list',
+        method: 'get',
+        params: query
+    })
+}
+
+
+// 查询仓库库存
+export function getBatchByProductId(query) {
+    return request({
+        url: '/admin/slm/get/product/batch',
+        method: 'get',
+        params: query
+    })
+}
+
 
 // 查询汇率
 export function getExchangeRate() {

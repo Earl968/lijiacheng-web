@@ -27,10 +27,21 @@
                     </el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button icon="el-icon-document-add" size="mini"
-                               @click="showUpdate">出入库操作
+                    <el-button
+                        icon="el-icon-close"
+                        plain
+                        size="mini"
+                        type="warning"
+                        @click="handleClose"
+                    >关闭
                     </el-button>
                 </el-form-item>
+
+<!--                <el-form-item>-->
+<!--                    <el-button icon="el-icon-document-add" size="mini"-->
+<!--                               @click="showUpdate">出入库操作-->
+<!--                    </el-button>-->
+<!--                </el-form-item>-->
             </el-form>
 
             <el-dialog :close-on-click-modal="false" :visible.sync="slmUpdateVisible" title="出入库操作"
@@ -259,7 +270,7 @@ import {getBatchDetail, getExchangeRate, stockControl, summary} from "@/api/admi
 import {Message} from "element-ui";
 
 export default {
-    name: "slm",
+    name: "slm-summary",
     data() {
         return {
             slmLoading: false,
@@ -323,7 +334,14 @@ export default {
         },
         getData() {
             let _this = this;
+            if (_this.queryParams.storeId === undefined || _this.queryParams.storeId === '') {
+                return Message.warning("请选择仓库")
+            }
+            if (_this.queryParams.month === undefined || _this.queryParams.month === '' || _this.queryParams.month === null) {
+                return Message.warning("请选择月份")
+            }
             _this.slmLoading = true;
+            console.log(JSON.stringify(_this.queryParams))
             summary(_this.queryParams).then(resp => {
                 _this.dataList = resp.data;
                 _this.slmLoading = false;
@@ -381,7 +399,7 @@ export default {
                     Message.error("第" + (i + 1) + "条数据的基本信息未完善");
                     return;
                 }
-                if(detail.productNum === 0){
+                if (detail.productNum === 0) {
                     Message.error("第" + (i + 1) + "条商品数量未填写");
                     return;
                 }
@@ -510,7 +528,12 @@ export default {
                 detail.productNum = 0; // 如果输入的不是数字，则重置为 0
                 // 同样，你可以添加处理非法输入的逻辑
             }
-        }
+        },
+        // 返回按钮
+        handleClose() {
+            const obj = {path: "/admin/slm_num"};
+            this.$tab.closeOpenPage(obj);
+        },
     }
 }
 </script>

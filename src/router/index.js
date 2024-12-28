@@ -161,6 +161,20 @@ export const dynamicRoutes = [
                 meta: {title: '修改生成配置', activeMenu: '/tool/gen'}
             }
         ]
+    },
+    {
+        path: '/admin/slm-summary',
+        component: Layout,
+        hidden: false,
+        permissions: ['admin:slm:list'],
+        children: [
+            {
+                path: 'index/:storeId',
+                component: () => import('@/views/admin/slm/index.vue'),
+                name: 'slm-summary',
+                meta: {title: '进销存汇总', activeMenu: '/admin/slm_num'}
+            }
+        ]
     }
 ]
 
