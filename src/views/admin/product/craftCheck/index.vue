@@ -162,5 +162,8 @@
     };
 </script>
 
-<style>
+<style scoped>
+   .el-table__row:hover {
+     background-color: inherit !important;
+   }
 </style>
