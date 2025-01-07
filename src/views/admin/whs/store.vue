@@ -7,7 +7,7 @@
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                 </el-select>
-                <el-button type="primary" @click="download">下载<i class="el-icon-bottom el-icon--right"></i></el-button>
+                <el-button type="primary" @click="download" :loading="downloadStyle">{{ downloadText }}<i class="el-icon-bottom el-icon--right"></i></el-button>
             </el-col>
 
         </el-row>
@@ -72,7 +72,9 @@
                         label: 'Y06-整灯仓库'
                     },
                 ],
-                value: []
+                value: [],
+                downloadStyle: false,
+                downloadText: '下载'
             }
         },
         created() {
@@ -84,7 +86,29 @@
                     this.$message.error("请选择对应仓库！！");
                     return;
                 }
-                window.location.href = this.projectUrl + '/admin/erp/Store/download?wh=' + this.value
+                this.downloadStyle= true;
+                this.downloadText= '正在下载';
+                fetch(this.projectUrl + '/admin/erp/Store/download?wh=' + this.value)
+                .then(response => response.blob())
+                .then(blob => {
+                  const link = document.createElement('a');
+                  link.href = URL.createObjectURL(blob);
+                  link.download = '下载文件.xlsx'; // 设置下载文件的名称
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+                  this.downloadStyle = false;
+                  this.downloadText= '下载';
+                })
+                .catch(error => {
+                    this.downloadStyle= true;
+                    this.downloadText= '正在下载';
+                    this.$message.error("下载出错,请联系管理员!");
+                    console.error('Error downloading file:', error);
+                });
+
+
              }
          }
     }
